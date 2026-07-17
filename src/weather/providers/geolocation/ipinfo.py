@@ -8,7 +8,6 @@ class IPInfoResponse(msgspec.Struct, frozen=True):
     loc: str
     city: str
     region: str
-    postal: str
     country: str
 
     @property
@@ -32,7 +31,7 @@ class IPInfo(GeolocationProvider):
     @staticmethod
     def _parse_data(data: IPInfoResponse) -> Location:
         latitude, longitude = data.coordinates
-        display_name = f"{data.city}, {data.region}, {data.postal}, {data.country}"
+        display_name = f"{data.city}, {data.region}, {data.country}"
 
         return Location(
             latitude=latitude, longitude=longitude, display_name=display_name
