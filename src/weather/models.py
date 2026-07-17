@@ -30,9 +30,9 @@ class Location(msgspec.Struct, frozen=True):
 
     def __post_init__(self):
         if not -90 <= self.latitude <= 90:
-            raise ValueError()
+            raise ValueError(f"Invalid latitude: {self.latitude}")
         if not -180 <= self.longitude <= 180:
-            raise ValueError()
+            raise ValueError(f"Invalid longitude: {self.longitude}")
 
 
 class CurrentWeather(msgspec.Struct, frozen=True):
@@ -54,7 +54,7 @@ class DailyForecast(msgspec.Struct, frozen=True):
     temp_min: float
     temp_max: float
     precipitation_sum: float
-    precipitation_prob_max: float
+    precipitation_prob_max: int
     wind_speed_max: float
     sunrise: str
     sunset: str
@@ -64,7 +64,7 @@ class AirQuality(msgspec.Struct, frozen=True):
     us_aqi: float
     pm_2_5: float
     pm_10: float
-    valid_until: float
+    valid_until: UnixTimestamp
 
 
 class WeatherData(msgspec.Struct, frozen=True):

@@ -7,7 +7,7 @@ from weather import __version__
 app = typer.Typer()
 
 
-def version_callback(value: bool):
+def version_callback(value: bool) -> None:
     """Show version and exit."""
     if value:
         print(f"weather {__version__}")
