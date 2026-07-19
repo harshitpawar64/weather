@@ -1,7 +1,9 @@
+import asyncio
 from typing import Annotated
 
 import typer
 
+import weather.app
 from weather import __version__
 
 app = typer.Typer()
@@ -16,7 +18,17 @@ def version_callback(value: bool) -> None:
 
 @app.command()
 def main(
-    version: Annotated[
-        bool | None, typer.Option("--version", callback=version_callback, is_eager=True)
+    location: Annotated[
+        str | None, typer.Option("--location", "-l", help="Location")
     ] = None,
-): ...
+    version: Annotated[
+        bool | None,
+        typer.Option(
+            "--version",
+            callback=version_callback,
+            is_eager=True,
+            help="Show version and exit.",
+        ),
+    ] = None,
+):
+    asyncio.run(weather.app.run(location))
