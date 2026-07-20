@@ -14,7 +14,7 @@ from weather.services import (
 console = Console()
 
 
-async def run(query: str | None):
+async def run(query: str | None, unit_system: UnitSystem):
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
             geocoder = GeocodingService(client)
@@ -27,7 +27,7 @@ async def run(query: str | None):
         aqi_service = AQIService(client)
 
         weather, aqi = await asyncio.gather(
-            weather_service.get_weather(location, UnitSystem.METRIC),
+            weather_service.get_weather(location, unit_system),
             aqi_service.get_aqi(location),
         )
 
