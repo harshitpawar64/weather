@@ -34,7 +34,7 @@ async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
             aqi_service.get_aqi(location),
         )
 
-    cache.save(location, weather, aqi)
+    cache.save(location, weather, aqi, query)
 
     if json_output:
         response = WeatherResponse(location, weather, aqi)
