@@ -38,7 +38,7 @@ class Cache:
         return self._data.queries.get(query.lower())
 
     def get_weather(
-        self, location: Location, unit_system: UnitSystem
+        self, location: Location, unit_system: UnitSystem, ignore_expiry: bool = False
     ) -> WeatherData | None:
         key = self._get_key(location)
         entry = self._data.data.get(key)
@@ -49,12 +49,14 @@ class Cache:
         if entry.weather.unit_system != unit_system:
             return None
 
-        if time.time() > entry.weather.valid_until:
+        if not ignore_expiry and time.time() > entry.weather.valid_until:
             return None
 
         return entry.weather
 
-    def get_aqi(self, location: Location) -> AirQuality | None:
+    def get_aqi(
+        self, location: Location, ignore_expiry: bool = False
+    ) -> AirQuality | None:
         key = self._get_key(location)
 
         entry = self._data.data.get(key)
@@ -62,7 +64,7 @@ class Cache:
         if not entry or not entry.aqi:
             return None
 
-        if time.time() > entry.aqi.valid_until:
+        if not ignore_expiry and time.time() > entry.aqi.valid_until:
             return None
 
         return entry.aqi

@@ -29,4 +29,9 @@ class WeatherService:
             except Exception as e:
                 logger.warning(f"{provider.__class__.__name__} failed: {e}")
 
+        if stale_cache := self.cache.get_weather(
+            location, unit_system, ignore_expiry=True
+        ):
+            return stale_cache
+
         raise RuntimeError("All Weather providers failed.")
