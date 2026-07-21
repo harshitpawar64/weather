@@ -72,3 +72,9 @@ class WeatherData(msgspec.Struct, frozen=True):
     daily: list[DailyForecast]
     unit_system: UnitSystem
     valid_until: UnixTimestamp
+
+
+class WeatherResponse(msgspec.Struct, frozen=True):
+    location: Location
+    weather: WeatherData
+    aqi: AirQuality

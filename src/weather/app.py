@@ -1,10 +1,11 @@
 import asyncio
 
 import httpx
+import msgspec
 from rich.console import Console
 
 from weather.cache import Cache
-from weather.models import UnitSystem
+from weather.models import UnitSystem, WeatherResponse
 from weather.services import (
     AQIService,
     GeocodingService,
@@ -16,7 +17,7 @@ console = Console()
 cache = Cache()
 
 
-async def run(query: str | None, unit_system: UnitSystem):
+async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
             geocoder = GeocodingService(client, cache)
@@ -34,6 +35,13 @@ async def run(query: str | None, unit_system: UnitSystem):
         )
 
     cache.save(location, weather, aqi)
+
+    if json_output:
+        response = WeatherResponse(location, weather, aqi)
+
+        print(msgspec.json.encode(response).decode())
+
+        return
 
     console.print(location)
     console.print(weather)

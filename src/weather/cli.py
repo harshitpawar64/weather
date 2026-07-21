@@ -46,6 +46,9 @@ def main(
     imperial: Annotated[
         bool, typer.Option("--imperial", help="Use imperial units (°F, mph, in)")
     ] = False,
+    json_output: Annotated[
+        bool, typer.Option("--json", help="Output result in JSON format.")
+    ] = False,
     version: Annotated[
         bool | None,
         typer.Option(
@@ -57,4 +60,4 @@ def main(
     ] = None,
 ):
     unit_system = validate_units(ctx)
-    asyncio.run(weather.app.run(location, unit_system))
+    asyncio.run(weather.app.run(location, unit_system, json_output))
