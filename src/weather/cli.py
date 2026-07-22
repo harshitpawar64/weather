@@ -25,7 +25,7 @@ def validate_units(ctx: typer.Context) -> UnitSystem:
     if imperial:
         return UnitSystem.IMPERIAL
 
-    return UnitSystem.METRIC
+    return weather.app.config.unit_system
 
 
 def version_callback(value: bool) -> None:

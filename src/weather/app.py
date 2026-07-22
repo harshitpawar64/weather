@@ -5,6 +5,7 @@ import msgspec
 from rich.console import Console
 
 from weather.cache import Cache
+from weather.config import Config
 from weather.models import UnitSystem, WeatherResponse
 from weather.services import (
     AQIService,
@@ -15,6 +16,7 @@ from weather.services import (
 
 console = Console()
 cache = Cache()
+config = Config()
 
 
 async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
@@ -22,9 +24,12 @@ async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
         if query:
             geocoder = GeocodingService(client, cache)
             location = await geocoder.geocode(query)
+        elif config.location:
+            location = config.location
         else:
             geolocator = GeolocationService(client)
             location = await geolocator.geolocate()
+            config.save(location)
 
         weather_service = WeatherService(client, cache)
         aqi_service = AQIService(client, cache)
