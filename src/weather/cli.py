@@ -5,6 +5,7 @@ import typer
 
 import weather.app
 from weather import __version__
+from weather.logging import setup_logging
 from weather.models import UnitSystem
 
 app = typer.Typer()
@@ -34,7 +35,7 @@ def version_callback(value: bool) -> None:
         raise typer.Exit()
 
 
-@app.command()
+@app.callback(invoke_without_command=True)
 def main(
     ctx: typer.Context,
     location: Annotated[
@@ -49,6 +50,9 @@ def main(
     json_output: Annotated[
         bool, typer.Option("--json", help="Output result in JSON format.")
     ] = False,
+    verbose: Annotated[
+        bool, typer.Option("--verbose", "-v", help="Verbose logging output.")
+    ] = False,
     version: Annotated[
         bool | None,
         typer.Option(
@@ -59,5 +63,15 @@ def main(
         ),
     ] = None,
 ):
+    if ctx.invoked_subcommand:
+        return
+
+    setup_logging(verbose)
+
     unit_system = validate_units(ctx)
-    asyncio.run(weather.app.run(location, unit_system, json_output))
+
+    try:
+        asyncio.run(weather.app.run(location, unit_system, json_output))
+    except KeyboardInterrupt:
+        typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
+        raise typer.Exit(130)

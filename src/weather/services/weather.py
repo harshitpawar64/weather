@@ -27,11 +27,12 @@ class WeatherService:
             try:
                 return await provider.fetch_weather(location, unit_system)
             except Exception as e:
-                logger.warning(f"{provider.__class__.__name__} failed: {e}")
+                logger.warning("%s failed: %s", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_weather(
             location, unit_system, ignore_expiry=True
         ):
             return stale_cache
 
-        raise RuntimeError("All Weather providers failed.")
+        logger.error("All weather providers failed.")
+        raise RuntimeError("All weather providers failed.")

@@ -25,9 +25,10 @@ class AQIService:
             try:
                 return await provider.fetch_aqi(location)
             except Exception as e:
-                logger.warning(f"{provider.__class__.__name__} failed: {e}.")
+                logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_aqi(location, ignore_expiry=True):
             return stale_cache
 
+        logger.error("All AQI providers failed.")
         raise RuntimeError("All AQI providers failed.")

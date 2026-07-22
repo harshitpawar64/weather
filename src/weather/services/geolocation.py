@@ -17,6 +17,7 @@ class GeolocationService:
             try:
                 return await provider.geolocate()
             except Exception as e:
-                logger.warning(f"{provider.__class__.__name__} failed: {e}.")
+                logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
+        logger.error("All geolocation providers failed.")
         raise RuntimeError("All geolocation providers failed.")

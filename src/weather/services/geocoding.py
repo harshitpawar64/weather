@@ -23,6 +23,7 @@ class GeocodingService:
             try:
                 return await provider.geocode(query)
             except Exception as e:
-                logger.warning(f"{provider.__class__.__name__} failed: {e}.")
+                logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
+        logger.error("All geocoding providers failed.")
         raise RuntimeError("All geocoding providers failed.")
