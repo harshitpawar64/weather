@@ -85,6 +85,9 @@ class Cache:
 
         self.file.write_bytes(self._encoder.encode(self._data))
 
+    def clear(self):
+        self.file.unlink(missing_ok=True)
+
     @staticmethod
     def _get_key(location: Location) -> str:
         return f"{round(location.latitude, 2)},{round(location.longitude, 2)}"

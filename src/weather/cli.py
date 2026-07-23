@@ -5,10 +5,33 @@ import typer
 
 import weather.app
 from weather import __version__
+from weather.cache import Cache
+from weather.config import Config
 from weather.logging import setup_logging
 from weather.models import UnitSystem
 
 app = typer.Typer()
+cache_app = typer.Typer(help="Manage cache")
+config_app = typer.Typer(help="Manage config")
+
+app.add_typer(config_app, name="config")
+app.add_typer(cache_app, name="cache")
+
+
+@config_app.command("path")
+def config_path() -> None:
+    print(Config().file.resolve())
+
+
+@cache_app.command("clear")
+def cache_clear() -> None:
+    Cache().clear()
+    typer.secho("✓ Cache cleared successfully.", fg=typer.colors.GREEN)
+
+
+@cache_app.command("path")
+def cache_path() -> None:
+    print(Cache().file.resolve())
 
 
 def validate_units(ctx: typer.Context) -> UnitSystem:
