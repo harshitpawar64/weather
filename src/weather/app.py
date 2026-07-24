@@ -7,6 +7,7 @@ from rich.console import Console
 from weather.cache import Cache
 from weather.config import Config
 from weather.models import UnitSystem, WeatherResponse
+from weather.onboarding import onboarding
 from weather.services import (
     AQIService,
     GeocodingService,
@@ -27,9 +28,11 @@ async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
         elif config.location:
             location = config.location
         else:
-            geolocator = GeolocationService(client)
-            location = await geolocator.geolocate()
-            config.save(location)
+            location, unit_system = await onboarding(
+                GeolocationService(client), GeocodingService(client, cache)
+            )
+
+            config.save(location, unit_system)
 
         weather_service = WeatherService(client, cache)
         aqi_service = AQIService(client, cache)
@@ -41,13 +44,11 @@ async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
 
     cache.save(location, weather, aqi, query)
 
-    if json_output:
-        response = WeatherResponse(location, weather, aqi)
+    response = WeatherResponse(location, weather, aqi)
 
+    if json_output:
         print(msgspec.json.encode(response).decode())
 
         return
 
-    console.print(location)
-    console.print(weather)
-    console.print(aqi)
+    console.print(response)
