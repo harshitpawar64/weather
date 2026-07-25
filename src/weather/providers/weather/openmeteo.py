@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, timezone
+from datetime import datetime
 from typing import Any
 
 import msgspec
@@ -8,10 +8,10 @@ from weather.models import (
     DailyForecast,
     Location,
     UnitSystem,
-    UnixTimestamp,
     WeatherData,
 )
 from weather.providers.weather import WeatherProvider
+from weather.utils import calculate_valid_until, parse_datetime
 
 
 class OpenMeteoCurrentResponse(msgspec.Struct, frozen=True):
@@ -89,17 +89,21 @@ class OpenMeteo(WeatherProvider):
 
         data = msgspec.json.decode(response.content, type=OpenMeteoResponse)
 
+        local_dt = parse_datetime(data.current.time, data.utc_offset_seconds)
+
         return WeatherData(
-            current=self._parse_current(data.current),
+            current=self._parse_current(data.current, local_dt),
             daily=self._parse_daily(data.daily),
             unit_system=unit_system,
-            valid_until=self._valid_until(data),
+            valid_until=calculate_valid_until(local_dt, data.current.interval),
         )
 
     @staticmethod
-    def _parse_current(current: OpenMeteoCurrentResponse) -> CurrentWeather:
+    def _parse_current(
+        current: OpenMeteoCurrentResponse, utc_dt: datetime
+    ) -> CurrentWeather:
         return CurrentWeather(
-            time=current.time,
+            time=utc_dt.isoformat(),
             weather_code=current.weather_code,
             temperature=current.temperature_2m,
             apparent_temperature=current.apparent_temperature,
@@ -126,12 +130,3 @@ class OpenMeteo(WeatherProvider):
         )
 
         return [DailyForecast(*row) for row in rows]
-
-    @staticmethod
-    def _valid_until(data: OpenMeteoResponse) -> UnixTimestamp:
-        current = data.current
-        utc_dt = datetime.fromisoformat(current.time).replace(
-            tzinfo=timezone(timedelta(seconds=data.utc_offset_seconds))
-        )
-
-        return UnixTimestamp(utc_dt.timestamp() + current.interval)

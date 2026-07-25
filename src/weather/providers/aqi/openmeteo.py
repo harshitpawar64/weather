@@ -1,10 +1,10 @@
-from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import msgspec
 
 from weather.models import AirQuality, Location, UnixTimestamp
 from weather.providers.aqi.base import AQIProvider
+from weather.utils import calculate_valid_until, parse_datetime
 
 
 class OpenMeteoCurrentResponse(msgspec.Struct, frozen=True):
@@ -36,7 +36,11 @@ class OpenMeteo(AQIProvider):
 
         data = msgspec.json.decode(response.content, type=OpenMeteoResponse)
 
-        return self._parse_data(data.current, self._valid_until(data))
+        local_dt = parse_datetime(data.current.time, data.utc_offset_seconds)
+
+        return self._parse_data(
+            data.current, calculate_valid_until(local_dt, data.current.interval)
+        )
 
     @staticmethod
     def _parse_data(
@@ -48,12 +52,3 @@ class OpenMeteo(AQIProvider):
             pm_10=current.pm10,
             valid_until=valid_until,
         )
-
-    @staticmethod
-    def _valid_until(data: OpenMeteoResponse) -> UnixTimestamp:
-        current = data.current
-        utc_dt = datetime.fromisoformat(current.time).replace(
-            tzinfo=timezone(timedelta(seconds=data.utc_offset_seconds))
-        )
-
-        return UnixTimestamp(utc_dt.timestamp() + current.interval)
