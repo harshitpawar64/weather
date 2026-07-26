@@ -11,89 +11,89 @@ HDROP = "[dodger_blue1]‚ʻ[/]"
 
 # fmt:off
 _UNKNOWN = (
-    "    .--.   \n"
-    "      __)  \n"
-    "    (      \n"
-    "     `-᾿   \n"
-    "      •      "
+    "    .--.\n"
+    "      __)\n"
+    "    (\n"
+    "     `-᾿\n"
+    "      •"
 )
 
 _SUN = (
-    "[yellow]     \\    /    [/]\n"
-    "[yellow]      .--.      [/]\n"
-    "[yellow]  __ (    ) __  [/]\n"
-    "[yellow]      `--`      [/]\n"
-    "[yellow]     /    \\    [/]"
+    "[yellow]     \\    /[/]\n"
+    "[yellow]      .--.[/]\n"
+    "[yellow]  __ (    ) __[/]\n"
+    "[yellow]      `--`[/]\n"
+    "[yellow]     /    \\[/]"
 )
 
 _DAY_LIGHT_CLOUD = (
-    "[yellow]   \\__/                   [/]\n"
-    '[yellow] __/  )[/][grey70]--.     [/]\n'
-    "[yellow]   \\_[/][grey70](    ).  [/]\n"
-    "[yellow]   /[/][grey70](___(___)   [/]\n"
+    "[yellow]   \\__/[/]\n"
+    '[yellow] __/  )[/][grey70]--.[/]\n'
+    "[yellow]   \\_[/][grey70](    ).[/]\n"
+    "[yellow]   /[/][grey70](___(___)[/]\n"
 )
 
 _DAY_HEAVY_CLOUD = (
-    "[yellow]   \\__/                   [/]\n"
-    '[yellow] __/  )[/][grey62]--.     [/]\n'
-    "[yellow]   \\_[/][grey62](    ).  [/]\n"
-    "[yellow]   /[/][grey62](___(___)   [/]\n"
+    "[yellow]   \\__/[/]\n"
+    '[yellow] __/  )[/][grey62]--.[/]\n'
+    "[yellow]   \\_[/][grey62](    ).[/]\n"
+    "[yellow]   /[/][grey62](___(___)[/]\n"
 )
 
 _MOON = (
-    f"[cyan]  {STAR} .._  [/]\n"
-    "[cyan]  .' .-` [/]\n"
-    f"[cyan] /  /   {STAR} [/]\n"
-    "[cyan] \\  \\  [/]\n"
-    f"[cyan]{STAR} '._`_. [/]"
+    f"[cyan]  {STAR} .._[/]\n"
+    "[cyan]  .' .-`[/]\n"
+    f"[cyan] /  /   {STAR}[/]\n"
+    "[cyan] \\  \\[/]\n"
+    f"[cyan]{STAR} '._`_.[/]"
 )
 
 _NIGHT_LIGHT_CLOUD = (
-    "[cyan]  ,-,                      [/]\n"
-    "[cyan] /.( [/][grey70]  .--.     [/]\n"
-    "[cyan] \\ {[/][grey70]  (    ).  [/]\n"
-    "[cyan]  `-`[/][grey70](___(___)  [/]\n"
+    "[cyan]  ,-,[/]\n"
+    "[cyan] /.( [/][grey70]  .--.[/]\n"
+    "[cyan] \\ {[/][grey70]  (    ).[/]\n"
+    "[cyan]  `-`[/][grey70](___(___)[/]\n"
 )
 
 
 _NIGHT_HEAVY_CLOUD = (
-    "[cyan]  ,-,                      [/]\n"
-    "[cyan] /.( [/][grey62]  .--.     [/]\n"
-    "[cyan] \\ {[/][grey62]  (    ).  [/]\n"
-    "[cyan]  `-`[/][grey62](___(___)  [/]\n"
+    "[cyan]  ,-,[/]\n"
+    "[cyan] /.( [/][grey62]  .--.[/]\n"
+    "[cyan] \\ {[/][grey62]  (    ).[/]\n"
+    "[cyan]  `-`[/][grey62](___(___)[/]\n"
 )
 
 _LIGHT_CLOUD = (
-    "[grey70]    .--.     [/]\n"
-    "[grey70]   (    ).   [/]\n"
-    "[grey70]  (___(___)  [/]\n"
+    "[grey70]    .--.[/]\n"
+    "[grey70]   (    ).[/]\n"
+    "[grey70]  (___(___)[/]\n"
 )
 
 _HEAVY_CLOUD = (
-    "[grey62]    .--.     [/]\n"
-    "[grey62]   (    ).   [/]\n"
-    "[grey62]  (___(___)  [/]\n"
+    "[grey62]    .--.[/]\n"
+    "[grey62]   (    ).[/]\n"
+    "[grey62]  (___(___)[/]\n"
 )
 
 _OVERCAST = (
-    "                         \n"
-    "[grey62]    .--.      [/]\n"
-    "[grey62]  _(    )..   [/]\n"
-    "[grey62] (___.__)__)  [/]\n"
+    "\n"
+    "[grey62]    .--.[/]\n"
+    "[grey62]  _(    )..[/]\n"
+    "[grey62] (___.__)__)[/]\n"
 )
 
 _FOG = (
-    "                         \n"
-    "[grey74] _ - _ - _ -  [/]\n"
-    "[grey74]  _ - _ - _   [/]\n"
-    "[grey74] _ - _ - _ -  [/]\n"
+    "\n"
+    "[grey74] _ - _ - _ -[/]\n"
+    "[grey74]  _ - _ - _ [/]\n"
+    "[grey74] _ - _ - _ -[/]\n"
 )
 
 _RIME_FOG = (
-    "                                     \n"
-    f"[grey74] _ - _ {SNOW} _ -        [/]\n"
-    f"[grey74]  _ {SNOW} _ - _ {SNOW}  [/]\n"
-    f"[grey74] _ - _ {SNOW} _ -        [/]\n"
+    "\n"
+    f"[grey74] _ - _ {SNOW} _ -[/]\n"
+    f"[grey74]  _ {SNOW} _ - _ {SNOW}[/]\n"
+    f"[grey74] _ - _ {SNOW} _ -[/]\n"
 )
 
 _DRIZZLE_LIGHT = (
