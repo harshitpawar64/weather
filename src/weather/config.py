@@ -41,7 +41,10 @@ class Config:
 
         self._data = ConfigData(location=location, unit_system=unit_system)
 
-        self.file.write_bytes(msgspec.toml.encode(self._data))
+        temp_file = self.file.with_suffix(".tmp")
+        temp_file.write_bytes(msgspec.toml.encode(self._data))
+        temp_file.replace(self.file)
 
     def clear(self):
         self.file.unlink(missing_ok=True)
+        self.file.with_suffix(".tmp").unlink(missing_ok=True)

@@ -23,6 +23,20 @@ def config_path() -> None:
     print(Config().file.resolve())
 
 
+@cache_app.command("prune")
+def cache_prune() -> None:
+    removed = Cache().prune()
+    if removed:
+        typer.secho(
+            f"✓ Pruned {removed} expired cache {'entry' if removed == 1 else 'entries'}.",
+            fg=typer.colors.GREEN,
+        )
+    else:
+        typer.secho(
+            "• Cache is already clean. No expired entries found.", fg=typer.colors.BLUE
+        )
+
+
 @cache_app.command("clear")
 def cache_clear() -> None:
     Cache().clear()

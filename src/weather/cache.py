@@ -8,6 +8,8 @@ from weather.models import AirQuality, Location, UnitSystem, WeatherData
 _CACHE_DIR = user_cache_path("weather", "Harshit Pawar")
 _CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+_STALE_MAX_AGE = 604800  # 1 week
+
 
 class CacheEntry(msgspec.Struct, frozen=True):
     weather: WeatherData | None = None
@@ -83,10 +85,33 @@ class Cache:
 
         self._data.data[key] = CacheEntry(weather=weather, aqi=aqi)
 
-        self.file.write_bytes(self._encoder.encode(self._data))
+        self.prune()
+
+        temp_file = self.file.with_suffix(".tmp")
+        temp_file.write_bytes(self._encoder.encode(self._data))
+        temp_file.replace(self.file)
+
+    def prune(self) -> int:
+        now = time.time()
+
+        stale_keys = [
+            key
+            for key, entry in self._data.data.items()
+            if (not entry.weather or now > entry.weather.valid_until + _STALE_MAX_AGE)
+            and (not entry.aqi or now > entry.aqi.valid_until + _STALE_MAX_AGE)
+        ]
+
+        if not stale_keys:
+            return 0
+
+        for key in stale_keys:
+            del self._data.data[key]
+
+        return len(stale_keys)
 
     def clear(self):
         self.file.unlink(missing_ok=True)
+        self.file.with_suffix(".tmp").unlink(missing_ok=True)
 
     @staticmethod
     def _get_key(location: Location) -> str:
