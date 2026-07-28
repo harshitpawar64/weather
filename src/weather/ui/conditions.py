@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+CRESCENT = "[cyan]⏾[/]"
 STAR = "[yellow blink]✧[/]"
 BOLT = "[yellow blink]⚡[/]"
 SNOW = "[white]*[/]"
@@ -23,44 +24,40 @@ _SUN = (
     "[yellow]      .--.[/]\n"
     "[yellow]  __ (    ) __[/]\n"
     "[yellow]      `--`[/]\n"
-    "[yellow]     /    \\[/]"
+    "[yellow]     /    \\\\[/]"
 )
 
 _DAY_LIGHT_CLOUD = (
-    "[yellow]   \\__/[/]\n"
-    '[yellow] __/  )[/][grey70]--.[/]\n'
-    "[yellow]   \\_[/][grey70](    ).[/]\n"
+    '[yellow] _`/""[/][grey70].--.[/]\n'
+    "[yellow]  ,\\_[/][grey70](    ).[/]\n"
     "[yellow]   /[/][grey70](___(___)[/]\n"
 )
 
 _DAY_HEAVY_CLOUD = (
-    "[yellow]   \\__/[/]\n"
-    '[yellow] __/  )[/][grey62]--.[/]\n'
-    "[yellow]   \\_[/][grey62](    ).[/]\n"
+    '[yellow] _`/""[/][grey62].--.[/]\n'
+    "[yellow]  ,\\_[/][grey62](    ).[/]\n"
     "[yellow]   /[/][grey62](___(___)[/]\n"
 )
 
 _MOON = (
     f"[cyan]  {STAR} .._[/]\n"
-    "[cyan]  .' .-`[/]\n"
+    "[cyan]  .´ .-`[/]\n"
     f"[cyan] /  /   {STAR}[/]\n"
-    "[cyan] \\  \\[/]\n"
-    f"[cyan]{STAR} '._`_.[/]"
+    "[cyan] \\  \\\\[/]\n"
+    f"[cyan]{STAR} `._`_.[/]"
 )
 
 _NIGHT_LIGHT_CLOUD = (
-    "[cyan]  ,-,[/]\n"
-    "[cyan] /.( [/][grey70]  .--.[/]\n"
-    "[cyan] \\ {[/][grey70]  (    ).[/]\n"
-    "[cyan]  `-`[/][grey70](___(___)[/]\n"
+    f"[grey70]{CRESCENT}  .--. {STAR}[/]\n"
+    f"[grey70]  (    ). {STAR}[/]\n"
+    "[grey70] (___(___)[/]\n"
 )
 
 
 _NIGHT_HEAVY_CLOUD = (
-    "[cyan]  ,-,[/]\n"
-    "[cyan] /.( [/][grey62]  .--.[/]\n"
-    "[cyan] \\ {[/][grey62]  (    ).[/]\n"
-    "[cyan]  `-`[/][grey62](___(___)[/]\n"
+    f"[grey62]{CRESCENT}  .--. {STAR}[/]\n"
+    f"[grey62]  (    ). {STAR}[/]\n"
+    "[grey62] (___(___)[/]\n"
 )
 
 _LIGHT_CLOUD = (
@@ -76,24 +73,26 @@ _HEAVY_CLOUD = (
 )
 
 _OVERCAST = (
-    "\n"
     "[grey62]    .--.[/]\n"
-    "[grey62]  _(    )..[/]\n"
+    "[grey62]  .(    )..[/]\n"
     "[grey62] (___.__)__)[/]\n"
+    "\n"
 )
 
 _FOG = (
-    "\n"
     "[grey74] _ - _ - _ -[/]\n"
     "[grey74]  _ - _ - _ [/]\n"
     "[grey74] _ - _ - _ -[/]\n"
+    "[grey74]  _ - _ - _ [/]\n"
+    "\n"
 )
 
 _RIME_FOG = (
+    f"[grey74] _ - _ {SNOW} _ -[/]\n"
+    f"[grey74]  _ {SNOW} _ - {SNOW} -[/]\n"
+    f"[grey74] _ - _ {SNOW} _ -[/]\n"
+    f"[grey74]  _ {SNOW} _ - {SNOW} -[/]\n"
     "\n"
-    f"[grey74] _ - _ {SNOW} _ -[/]\n"
-    f"[grey74]  _ {SNOW} _ - _ {SNOW}[/]\n"
-    f"[grey74] _ - _ {SNOW} _ -[/]\n"
 )
 
 _DRIZZLE_LIGHT = (
@@ -206,8 +205,8 @@ class WeatherCondition:
 _WEATHER_CONDITIONS = {
     -1: WeatherCondition(label="Unknown", icon=_UNKNOWN),
     0: WeatherCondition(label="Clear sky", icon=_SUN),
-    1: WeatherCondition(label="Mainly clear", icon=_DAY_LIGHT_CLOUD),
-    2: WeatherCondition(label="Partly cloudy", icon=_DAY_LIGHT_CLOUD),
+    1: WeatherCondition(label="Mainly clear", icon=_DAY_LIGHT_CLOUD + "\n"),
+    2: WeatherCondition(label="Partly cloudy", icon=_DAY_LIGHT_CLOUD + "\n"),
     3: WeatherCondition(label="Overcast", icon=_OVERCAST),
     45: WeatherCondition(label="Fog", icon=_FOG),
     48: WeatherCondition(label="Rime fog", icon=_RIME_FOG),
@@ -249,8 +248,8 @@ _WEATHER_CONDITIONS = {
 
 _NIGHT_OVERRIDES = {
     0: WeatherCondition(label="Clear night", icon=_MOON),
-    1: WeatherCondition(label="Mainly clear", icon=_NIGHT_LIGHT_CLOUD),
-    2: WeatherCondition(label="Partly cloudy", icon=_NIGHT_LIGHT_CLOUD),
+    1: WeatherCondition(label="Mainly clear", icon=_NIGHT_LIGHT_CLOUD + "\n"),
+    2: WeatherCondition(label="Partly cloudy", icon=_NIGHT_LIGHT_CLOUD + "\n"),
     80: WeatherCondition(
         label="Light showers", icon=_NIGHT_LIGHT_CLOUD + _SHOWERS_LIGHT
     ),
