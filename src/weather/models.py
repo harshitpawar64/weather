@@ -23,6 +23,10 @@ class UnitSystem(StrEnum):
         return "mm" if self == UnitSystem.METRIC else "in"
 
 
+class Theme(StrEnum):
+    DEFAULT = auto()
+
+
 class Location(msgspec.Struct, frozen=True):
     latitude: float
     longitude: float

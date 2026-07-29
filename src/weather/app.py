@@ -2,11 +2,10 @@ import asyncio
 
 import httpx
 import msgspec
-from rich.console import Console
 
 from weather.cache import Cache
 from weather.config import Config
-from weather.models import UnitSystem, WeatherResponse
+from weather.models import Theme, UnitSystem, WeatherResponse
 from weather.onboarding import onboarding
 from weather.services import (
     AQIService,
@@ -14,13 +13,15 @@ from weather.services import (
     GeolocationService,
     WeatherService,
 )
+from weather.ui.render import render_weather
 
-console = Console()
 cache = Cache()
 config = Config()
 
 
-async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
+async def run(
+    query: str | None, unit_system: UnitSystem, theme: Theme, json_output: bool
+):
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
             geocoder = GeocodingService(client, cache)
@@ -51,4 +52,4 @@ async def run(query: str | None, unit_system: UnitSystem, json_output: bool):
 
         return
 
-    console.print(response)
+    render_weather(response)

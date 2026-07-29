@@ -1,7 +1,7 @@
 import msgspec
 from platformdirs import user_config_path
 
-from weather.models import Location, UnitSystem
+from weather.models import Location, Theme, UnitSystem
 
 _CONFIG_DIR = user_config_path("weather", "Harshit Pawar")
 _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
@@ -10,6 +10,7 @@ _CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 class ConfigData(msgspec.Struct):
     location: Location | None = None
     unit_system: UnitSystem = UnitSystem.METRIC
+    theme: Theme = Theme.DEFAULT
 
 
 class Config:
@@ -30,6 +31,10 @@ class Config:
     @property
     def unit_system(self) -> UnitSystem:
         return self._data.unit_system
+
+    @property
+    def theme(self) -> Theme:
+        return self._data.theme
 
     def save(
         self, location: Location | None = None, unit_system: UnitSystem | None = None
