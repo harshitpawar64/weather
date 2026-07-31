@@ -52,4 +52,4 @@ async def run(
 
         return
 
-    render_weather(response)
+    render_weather(response, theme)

@@ -5,7 +5,7 @@ from rich.panel import Panel
 from rich.table import Table
 from rich.text import Text
 
-from weather.models import DailyForecast, UnitSystem, WeatherResponse
+from weather.models import DailyForecast, Theme, UnitSystem, WeatherResponse
 from weather.ui.conditions import weather_condition
 from weather.ui.presentation import (
     format_clock,
@@ -18,8 +18,8 @@ from weather.ui.themes import get_theme
 console = Console()
 
 
-def render_weather(response: WeatherResponse, theme_name: str = "default") -> None:
-    overview = get_theme(theme_name)
+def render_weather(response: WeatherResponse, theme: Theme = Theme.DEFAULT) -> None:
+    overview = get_theme(theme)
 
     console.print(overview(response))
     console.print("")

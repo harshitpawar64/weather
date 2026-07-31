@@ -8,7 +8,7 @@ from weather import __version__
 from weather.cache import Cache
 from weather.config import Config
 from weather.logging import setup_logging
-from weather.models import UnitSystem
+from weather.models import Theme, UnitSystem
 
 app = typer.Typer()
 cache_app = typer.Typer(help="Manage cache")
@@ -62,7 +62,16 @@ def validate_units(ctx: typer.Context) -> UnitSystem:
     if imperial:
         return UnitSystem.IMPERIAL
 
-    return weather.app.config.unit_system
+    return Config().unit_system
+
+
+def validate_theme(ctx: typer.Context) -> Theme:
+    theme = ctx.params.get("theme", None)
+
+    if theme:
+        return theme
+
+    return Config().theme
 
 
 def version_callback(value: bool) -> None:
@@ -77,6 +86,10 @@ def main(
     ctx: typer.Context,
     location: Annotated[
         str | None, typer.Option("--location", "-l", help="Location")
+    ] = None,
+    theme: Annotated[
+        Theme | None,
+        typer.Option("--theme", "-t", help="Theme to use for rendering output."),
     ] = None,
     metric: Annotated[
         bool, typer.Option("--metric", help="Use metric units (°C, km/h, mm)")
@@ -106,9 +119,10 @@ def main(
     setup_logging(verbose)
 
     unit_system = validate_units(ctx)
+    theme = validate_theme(ctx)
 
     try:
-        asyncio.run(weather.app.run(location, unit_system, json_output))
+        asyncio.run(weather.app.run(location, unit_system, theme, json_output))
     except KeyboardInterrupt:
         typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
         raise typer.Exit(130)
