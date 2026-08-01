@@ -1,6 +1,25 @@
 from datetime import datetime, timezone
 
 
+def format_temperature(temp: float, unit: str):
+    celsius = temp if "C" in unit else (temp - 32) * 5 / 9
+
+    if celsius <= 0:
+        color = "cyan"
+    elif celsius <= 10:
+        color = "bright_blue"
+    elif celsius <= 20:
+        color = "green"
+    elif celsius <= 30:
+        color = "yellow"
+    elif celsius <= 40:
+        color = "dark_orange"
+    else:
+        color = "red"
+
+    return f"[{color}]{temp:.0f}[/]"
+
+
 def aqi_category(aqi: float) -> str:
     aqi = round(aqi)
     if aqi <= 50:
@@ -50,13 +69,13 @@ def format_updated(value: str) -> str:
         diff_minutes = int((now - dt).total_seconds() / 60)
 
         if diff_minutes < 1:
-            return "[dim]just now[/]"
+            return "[dim]Updated just now[/]"
         if diff_minutes < 60:
-            return f"[dim]{diff_minutes}m ago[/]"
+            return f"[dim]Updated {diff_minutes}m ago[/]"
         if diff_minutes < 1440:
-            return f"[dim]{diff_minutes // 60}h ago[/]"
+            return f"[dim]Updated {diff_minutes // 60}h ago[/]"
 
-        return f"[dim]{diff_minutes // 1440}d ago[/]"
+        return f"[dim]Updated {diff_minutes // 1440}d ago[/]"
     except ValueError, TypeError:
         return value
 

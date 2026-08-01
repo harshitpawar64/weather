@@ -11,6 +11,7 @@ from weather.ui.presentation import (
     format_clock,
     format_day,
     format_precipitation,
+    format_temperature,
     format_wind_speed,
 )
 from weather.ui.themes import get_theme
@@ -38,9 +39,12 @@ def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:
 
     icon = Align.center(condition.icon)
     label = Align.center(Text(condition.label, style="bold cyan"))
+
+    temp_min = format_temperature(day.temp_min, units.temperature)
+    temp_max = format_temperature(day.temp_max, units.temperature)
+
     temp = Align.center(
-        f"{day.temp_min:.0f}° / {day.temp_max:.0f}{units.temperature}",
-        style="bold white",
+        f"{temp_min} / {temp_max} {units.temperature}", style="bold white"
     )
 
     details = Table.grid(expand=True, padding=(0, 1))
