@@ -19,18 +19,22 @@ from weather.ui.themes import get_theme
 console = Console()
 
 
-def render_weather(response: WeatherResponse, theme: Theme = Theme.DEFAULT) -> None:
+def render_weather(
+    response: WeatherResponse, theme: Theme = Theme.DEFAULT, days: int = 7
+) -> None:
     overview = get_theme(theme)
 
     console.print(overview(response))
-    console.print("")
-    console.print(_forecast_panels(response))
+
+    if days > 1:
+        console.print("")
+        console.print(_forecast_panels(response, days))
 
 
-def _forecast_panels(response: WeatherResponse) -> Columns:
+def _forecast_panels(response: WeatherResponse, days: int) -> Columns:
     weather = response.weather
     units = weather.unit_system
-    panels = (_forecast_panel(day, units) for day in weather.daily[1:])
+    panels = (_forecast_panel(day, units) for day in weather.daily[1:days])
     return Columns(panels, equal=True, expand=True)
 
 

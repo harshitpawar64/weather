@@ -20,7 +20,11 @@ config = Config()
 
 
 async def run(
-    query: str | None, unit_system: UnitSystem, theme: Theme, json_output: bool
+    query: str | None,
+    unit_system: UnitSystem,
+    theme: Theme,
+    days: int,
+    json_output: bool,
 ):
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
@@ -52,4 +56,4 @@ async def run(
 
         return
 
-    render_weather(response, theme)
+    render_weather(response, theme, days)

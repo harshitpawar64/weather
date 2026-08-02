@@ -91,6 +91,16 @@ def main(
         Theme | None,
         typer.Option("--theme", "-t", help="Theme to use for rendering output."),
     ] = None,
+    days: Annotated[
+        int,
+        typer.Option(
+            "--days",
+            "-d",
+            min=1,
+            max=16,
+            help="Total days of forecast, including today.",
+        ),
+    ] = 7,
     metric: Annotated[
         bool, typer.Option("--metric", help="Use metric units (°C, km/h, mm)")
     ] = False,
@@ -122,7 +132,7 @@ def main(
     theme = validate_theme(ctx)
 
     try:
-        asyncio.run(weather.app.run(location, unit_system, theme, json_output))
+        asyncio.run(weather.app.run(location, unit_system, theme, days, json_output))
     except KeyboardInterrupt:
         typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
         raise typer.Exit(130)

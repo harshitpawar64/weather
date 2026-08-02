@@ -76,6 +76,7 @@ class OpenMeteo(WeatherProvider):
                 "sunset",
                 "weather_code",
             ],
+            "forecast_days": 16,
             "timezone": "auto",
         }
 
