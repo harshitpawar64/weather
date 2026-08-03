@@ -4,14 +4,14 @@ import httpx
 
 from weather.cache import Cache
 from weather.models import AirQuality, Location
-from weather.providers.aqi import OpenMeteo
+from weather.providers.aqi import OpenMeteo, OpenWeather
 
 logger = logging.getLogger(__name__)
 
 
 class AQIService:
     def __init__(self, client: httpx.AsyncClient, cache: Cache):
-        self.providers = (OpenMeteo(client),)
+        self.providers = (OpenMeteo(client), OpenWeather(client))
         self.cache = cache
 
     async def get_aqi(self, location: Location) -> AirQuality:
