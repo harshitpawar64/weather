@@ -1,8 +1,10 @@
 from datetime import datetime, timezone
 
+from weather.models import UnitSystem
 
-def format_temperature(temp: float, unit: str):
-    celsius = temp if "C" in unit else (temp - 32) * 5 / 9
+
+def format_temperature(temp: float, units: UnitSystem) -> str:
+    celsius = temp if units is UnitSystem.METRIC else (temp - 32) * 5 / 9
 
     if celsius <= 0:
         color = "cyan"
@@ -50,11 +52,11 @@ def format_precipitation(prob: int) -> str:
     return f"[dim]{prob}%[/]"
 
 
-def format_wind_speed(speed: float, unit: str) -> str:
-    threshold = 40 if "km" in unit else 25
+def format_wind_speed(speed: float, units: UnitSystem) -> str:
+    threshold = 40 if units is UnitSystem.METRIC else 25
     if speed >= threshold:
-        return f"[bold yellow]{speed:.0f} {unit} ⚠[/]"
-    return f"{speed:.0f} {unit}"
+        return f"[bold yellow]{speed:.0f} {units.wind_speed} ⚠[/]"
+    return f"{speed:.0f} {units.wind_speed}"
 
 
 def format_updated(value: str) -> str:

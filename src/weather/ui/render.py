@@ -44,8 +44,8 @@ def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:
     icon = Align.center(condition.icon)
     label = Align.center(Text(condition.label, style="bold cyan"))
 
-    temp_min = format_temperature(day.temp_min, units.temperature)
-    temp_max = format_temperature(day.temp_max, units.temperature)
+    temp_min = format_temperature(day.temp_min, units)
+    temp_max = format_temperature(day.temp_max, units)
 
     temp = Align.center(
         f"{temp_min} / {temp_max} {units.temperature}", style="bold white"
@@ -55,7 +55,7 @@ def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:
     details.add_column(style="dim")
     details.add_column(justify="right", style="bold white")
     details.add_row("Precip", format_precipitation(day.precipitation_prob_max))
-    details.add_row("Wind", format_wind_speed(day.wind_speed_max, units.wind_speed))
+    details.add_row("Wind", format_wind_speed(day.wind_speed_max, units))
     details.add_row("Sun", f"{format_clock(day.sunrise)} - {format_clock(day.sunset)}")
 
     return Panel(

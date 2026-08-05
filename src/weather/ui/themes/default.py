@@ -20,8 +20,8 @@ def render_overview(response: WeatherResponse) -> Group:
     units = weather.unit_system
     aqi = response.aqi
 
-    actual_temp = format_temperature(current.temperature, units.temperature)
-    feels_like = format_temperature(current.apparent_temperature, units.temperature)
+    actual_temp = format_temperature(current.temperature, units)
+    feels_like = format_temperature(current.apparent_temperature, units)
 
     condition = weather_condition(current.weather_code, is_day=current.is_day)
 
@@ -37,7 +37,7 @@ def render_overview(response: WeatherResponse) -> Group:
     current_table.add_row("Humidity", f"{current.humidity}%")
     current_table.add_row(
         "Wind",
-        f"{wind_direction(current.wind_direction)} {current.wind_speed:.0f}({current.wind_gusts:.0f}) {units.wind_speed}",
+        f"{wind_direction(current.wind_direction)} {current.wind_speed:.0f}([bold]{current.wind_gusts:.0f}[/]) {units.wind_speed}",
     )
     current_table.add_row(
         "Precip",
