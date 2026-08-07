@@ -54,12 +54,12 @@ class CurrentWeather(msgspec.Struct, frozen=True):
 
 class DailyForecast(msgspec.Struct, frozen=True):
     date: str
-    weather_code: int
-    temp_min: float
-    temp_max: float
-    precipitation_sum: float
-    precipitation_prob_max: int
-    wind_speed_max: float
+    weather_code: int | None
+    temp_min: float | None
+    temp_max: float | None
+    precipitation_sum: float | None
+    precipitation_prob_max: int | None
+    wind_speed_max: float | None
     sunrise: str
     sunset: str
 

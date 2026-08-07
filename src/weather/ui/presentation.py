@@ -3,7 +3,10 @@ from datetime import datetime, timezone
 from weather.models import UnitSystem
 
 
-def format_temperature(temp: float, units: UnitSystem) -> str:
+def format_temperature(temp: float | None, units: UnitSystem) -> str:
+    if temp is None:
+        return "[dim]-[/]"
+
     celsius = temp if units is UnitSystem.METRIC else (temp - 32) * 5 / 9
 
     if celsius <= 0:
@@ -41,21 +44,29 @@ def aqi_category(aqi: float) -> str:
 def wind_direction(degrees: int) -> str:
     directions = ("↑", "↗", "→", "↘", "↓", "↙", "←", "↖")
     arrow = directions[round(degrees / 45) % len(directions)]
+
     return f"[bold blue]{arrow}[/]"
 
 
-def format_precipitation(prob: int) -> str:
-    if prob >= 70:
+def format_precipitation(prob: int | None) -> str:
+    if prob is None:
+        return "[dim]-[/]"
+    if prob >= 66:
         return f"[bold cyan]{prob}% ☂[/]"
     if prob >= 33:
         return f"[cyan]{prob}%[/]"
-    return f"[dim]{prob}%[/]"
+
+    return f"{prob}%"
 
 
-def format_wind_speed(speed: float, units: UnitSystem) -> str:
+def format_wind_speed(speed: float | None, units: UnitSystem) -> str:
+    if speed is None:
+        return "[dim]-[/]"
+
     threshold = 40 if units is UnitSystem.METRIC else 25
     if speed >= threshold:
         return f"[bold yellow]{speed:.0f} {units.wind_speed} ⚠[/]"
+
     return f"{speed:.0f} {units.wind_speed}"
 
 
@@ -89,8 +100,15 @@ def format_day(value: str) -> str:
         return value
 
 
-def format_clock(value: str) -> str:
-    try:
-        return datetime.fromisoformat(value).strftime("%H:%M")
-    except ValueError:
-        return value
+def format_sun(sunrise: str, sunset: str) -> str:
+    sr = datetime.fromisoformat(sunrise)
+    ss = datetime.fromisoformat(sunset)
+
+    diff = ss - sr
+
+    if sr.hour == ss.hour and sr.minute == ss.minute:
+        return (
+            "[yellow]☀ Midnight sun[/]" if diff.days == 1 else "[cyan]⏾ Polar night[/]"
+        )
+
+    return f"{sr.strftime('%H:%M')} - {ss.strftime('%H:%M')}"

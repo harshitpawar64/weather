@@ -8,9 +8,9 @@ from rich.text import Text
 from weather.models import DailyForecast, Theme, UnitSystem, WeatherResponse
 from weather.ui.conditions import weather_condition
 from weather.ui.presentation import (
-    format_clock,
     format_day,
     format_precipitation,
+    format_sun,
     format_temperature,
     format_wind_speed,
 )
@@ -56,7 +56,7 @@ def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:
     details.add_column(justify="right", style="bold white")
     details.add_row("Precip", format_precipitation(day.precipitation_prob_max))
     details.add_row("Wind", format_wind_speed(day.wind_speed_max, units))
-    details.add_row("Sun", f"{format_clock(day.sunrise)} - {format_clock(day.sunset)}")
+    details.add_row("Sun", format_sun(day.sunrise, day.sunset))
 
     return Panel(
         Group(icon, "", label, temp, "", details),

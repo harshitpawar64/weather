@@ -30,12 +30,12 @@ class OpenMeteoCurrentResponse(msgspec.Struct, frozen=True):
 
 class OpenMeteoDailyResponse(msgspec.Struct, frozen=True):
     time: list[str]
-    weather_code: list[int]
-    temperature_2m_min: list[float]
-    temperature_2m_max: list[float]
-    precipitation_sum: list[float]
-    precipitation_probability_max: list[int]
-    wind_speed_10m_max: list[float]
+    weather_code: list[int | None]
+    temperature_2m_min: list[float | None]
+    temperature_2m_max: list[float | None]
+    precipitation_sum: list[float | None]
+    precipitation_probability_max: list[int | None]
+    wind_speed_10m_max: list[float | None]
     sunrise: list[str]
     sunset: list[str]
 

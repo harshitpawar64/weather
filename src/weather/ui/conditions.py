@@ -273,7 +273,10 @@ _NIGHT_OVERRIDES = {
 }
 
 
-def weather_condition(wmo_code: int, is_day: bool = True) -> WeatherCondition:
+def weather_condition(wmo_code: int | None, is_day: bool = True) -> WeatherCondition:
+    if wmo_code is None:
+        return _WEATHER_CONDITIONS[-1]
+
     if not is_day and wmo_code in _NIGHT_OVERRIDES:
         return _NIGHT_OVERRIDES[wmo_code]
 
