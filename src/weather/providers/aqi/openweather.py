@@ -1,4 +1,3 @@
-import os
 from typing import Any
 
 import msgspec
@@ -24,12 +23,13 @@ class OpenWeatherResponse(msgspec.Struct, frozen=True):
 
 class OpenWeather(AQIProvider):
     API_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
+    API_KEY_ENV = "OPENWEATHER_API_KEY"
 
     async def fetch_aqi(self, location: Location) -> AirQuality:
         params: dict[str, Any] = {
             "lat": location.latitude,
             "lon": location.longitude,
-            "appid": os.environ.get("OPENWEATHER_API_KEY"),
+            "appid": self.required_api_key,
         }
 
         response = await self.client.get(self.API_URL, params=params)

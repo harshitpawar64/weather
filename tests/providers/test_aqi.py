@@ -1,4 +1,5 @@
 import httpx
+import pytest
 
 import tests.constants as c
 from weather.models import UnixTimestamp
@@ -31,7 +32,8 @@ async def test_openmeteo_aqi_fetch():
         assert aqi_data.pm_10 == 18.5
 
 
-async def test_openweather_aqi_fetch():
+async def test_openweather_aqi_fetch(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.setenv("OPENWEATHER_API_KEY", "test_key")
     components = OpenWeatherComponents(pm2_5=5.0, pm10=25.0)
     item = OpenWeatherList(dt=UnixTimestamp(0.0), components=components)
     payload = OpenWeatherResponse(items=[item])
@@ -42,9 +44,22 @@ async def test_openweather_aqi_fetch():
 
     async with httpx.AsyncClient(transport=transport) as client:
         provider = OpenWeather(client)
+        assert provider.is_configured is True
         aqi_data = await provider.fetch_aqi(c.LOCATION)
 
         assert aqi_data.pm_2_5 == 5.0
         assert aqi_data.pm_10 == 25.0
         assert aqi_data.us_aqi == get_us_aqi(5.0, 25.0)
         assert aqi_data.valid_until == 3600.0
+
+
+async def test_openweather_unconfigured(monkeypatch: pytest.MonkeyPatch):
+    monkeypatch.delenv("OPENWEATHER_API_KEY", raising=False)
+
+    async with httpx.AsyncClient() as client:
+        provider = OpenWeather(client)
+        assert provider.is_configured is False
+        with pytest.raises(
+            RuntimeError, match="OPENWEATHER_API_KEY environment variable is not set"
+        ):
+            await provider.fetch_aqi(c.LOCATION)
