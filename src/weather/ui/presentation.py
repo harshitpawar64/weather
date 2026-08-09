@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from weather.models import UnitSystem
 
@@ -74,10 +74,10 @@ def format_updated(value: str) -> str:
     try:
         dt = datetime.fromisoformat(value)
 
-        if dt.tzinfo:
-            now = datetime.now(timezone.utc)
-        else:
-            now = datetime.now()
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=UTC)
+
+        now = datetime.now(UTC)
 
         diff_minutes = int((now - dt).total_seconds() / 60)
 

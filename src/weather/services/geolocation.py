@@ -1,16 +1,23 @@
 import logging
 
 import httpx
+import msgspec
 
 from weather.models import Location
-from weather.providers.geolocation import CountryIs, FreeIPAPI, IPInfo, IPWhoIs
+from weather.providers.geolocation import (
+    CountryIs,
+    FreeIPAPI,
+    GeolocationProvider,
+    IPInfo,
+    IPWhoIs,
+)
 
 logger = logging.getLogger(__name__)
 
 
 class GeolocationService:
     def __init__(self, client: httpx.AsyncClient):
-        self.providers = (
+        self.providers: tuple[GeolocationProvider, ...] = (
             IPWhoIs(client),
             FreeIPAPI(client),
             CountryIs(client),
@@ -21,7 +28,7 @@ class GeolocationService:
         for provider in self.providers:
             try:
                 return await provider.geolocate()
-            except Exception as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         logger.error("All geolocation providers failed.")

@@ -1,17 +1,21 @@
 import logging
 
 import httpx
+import msgspec
 
 from weather.cache import Cache
 from weather.models import AirQuality, Location
-from weather.providers.aqi import OpenMeteo, OpenWeather
+from weather.providers.aqi import AQIProvider, OpenMeteo, OpenWeather
 
 logger = logging.getLogger(__name__)
 
 
 class AQIService:
     def __init__(self, client: httpx.AsyncClient, cache: Cache):
-        self.providers = (OpenMeteo(client), OpenWeather(client))
+        self.providers: tuple[AQIProvider, ...] = (
+            OpenMeteo(client),
+            OpenWeather(client),
+        )
         self.cache = cache
 
     async def get_aqi(self, location: Location) -> AirQuality:
@@ -24,7 +28,7 @@ class AQIService:
         for provider in self.providers:
             try:
                 return await provider.fetch_aqi(location)
-            except Exception as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_aqi(location, ignore_expiry=True):

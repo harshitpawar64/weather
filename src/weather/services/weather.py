@@ -1,17 +1,18 @@
 import logging
 
 import httpx
+import msgspec
 
 from weather.cache import Cache
 from weather.models import Location, UnitSystem, WeatherData
-from weather.providers.weather import OpenMeteo
+from weather.providers.weather import OpenMeteo, WeatherProvider
 
 logger = logging.getLogger(__name__)
 
 
 class WeatherService:
     def __init__(self, client: httpx.AsyncClient, cache: Cache):
-        self.providers = (OpenMeteo(client),)
+        self.providers: tuple[WeatherProvider, ...] = (OpenMeteo(client),)
         self.cache = cache
 
     async def get_weather(
@@ -26,7 +27,7 @@ class WeatherService:
         for provider in self.providers:
             try:
                 return await provider.fetch_weather(location, unit_system)
-            except Exception as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
                 logger.warning("%s failed: %s", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_weather(

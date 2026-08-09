@@ -1,17 +1,21 @@
 import logging
 
 import httpx
+import msgspec
 
 from weather.cache import Cache
 from weather.models import Location
-from weather.providers.geocoding import Nominatim, OpenMeteo
+from weather.providers.geocoding import GeocodingProvider, Nominatim, OpenMeteo
 
 logger = logging.getLogger(__name__)
 
 
 class GeocodingService:
     def __init__(self, client: httpx.AsyncClient, cache: Cache):
-        self.providers = (Nominatim(client), OpenMeteo(client))
+        self.providers: tuple[GeocodingProvider, ...] = (
+            Nominatim(client),
+            OpenMeteo(client),
+        )
         self.cache = cache
 
     async def geocode(self, query: str) -> Location:
@@ -22,7 +26,7 @@ class GeocodingService:
         for provider in self.providers:
             try:
                 return await provider.geocode(query)
-            except Exception as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         logger.error("All geocoding providers failed.")
