@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7.0.1
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "latest"
+          enable-cache: true
+          activate-environment: true
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint
+        run: ruff check
+        continue-on-error: true
+
+      - name: Format check
+        run: ruff format --check
+        continue-on-error: true
+
+      - name: Type check
+        run: ty check
+        continue-on-error: true
+
+      - name: Run tests
+        run: pytest tests -v
