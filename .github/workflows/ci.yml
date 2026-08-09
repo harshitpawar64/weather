@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: [ main ]
   pull_request:
     branches: [ main ]
   workflow_dispatch:
@@ -32,15 +34,15 @@ jobs:
 
       - name: Lint
         run: ruff check
-        continue-on-error: true
 
       - name: Format check
+        if: always()
         run: ruff format --check
-        continue-on-error: true
 
       - name: Type check
+        if: always()
         run: ty check
-        continue-on-error: true
 
       - name: Run tests
+        if: always()
         run: pytest tests -v
