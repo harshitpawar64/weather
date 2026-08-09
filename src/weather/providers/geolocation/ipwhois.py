@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather.models import Location
@@ -15,6 +17,7 @@ class IPWhoIsResponse(msgspec.Struct, frozen=True):
 class IPWhoIs(GeolocationProvider):
     API_URL = "https://ipwho.is"
 
+    @override
     async def geolocate(self) -> Location:
         params = {"fields": "latitude,longitude,city,region,country,postal"}
 

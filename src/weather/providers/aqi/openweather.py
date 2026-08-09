@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, override
 
 import msgspec
 
@@ -25,6 +25,7 @@ class OpenWeather(AQIProvider):
     API_URL = "https://api.openweathermap.org/data/2.5/air_pollution"
     API_KEY_ENV = "OPENWEATHER_API_KEY"
 
+    @override
     async def fetch_aqi(self, location: Location) -> AirQuality:
         params: dict[str, Any] = {
             "lat": location.latitude,

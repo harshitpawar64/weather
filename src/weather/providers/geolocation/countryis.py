@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather.models import Location
@@ -18,6 +20,7 @@ class CountryIsResponse(msgspec.Struct, frozen=True):
 class CountryIs(GeolocationProvider):
     API_URL = "https://api.country.is"
 
+    @override
     async def geolocate(self) -> Location:
         params = {"fields": "location,city,country"}
 

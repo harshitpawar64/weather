@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, override
 
 import msgspec
 
@@ -23,6 +23,7 @@ class OpenMeteoResponse(msgspec.Struct, frozen=True):
 class OpenMeteo(AQIProvider):
     API_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
+    @override
     async def fetch_aqi(self, location: Location) -> AirQuality:
         params: dict[str, Any] = {
             "latitude": location.latitude,

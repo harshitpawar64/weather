@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather.models import Location
@@ -22,6 +24,7 @@ class OpenMeteoResponse(msgspec.Struct, frozen=True):
 class OpenMeteo(GeocodingProvider):
     API_URL = "https://geocoding-api.open-meteo.com/v1/search"
 
+    @override
     async def geocode(self, query: str) -> Location:
         params: dict[str, str | int] = {"name": query, "format": "json", "count": 1}
 

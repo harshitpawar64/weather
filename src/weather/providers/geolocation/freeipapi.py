@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather.models import Location
@@ -15,6 +17,7 @@ class FreeIPAPIResponse(msgspec.Struct, frozen=True):
 class FreeIPAPI(GeolocationProvider):
     API_URL = "https://free.freeipapi.com/api/json/"
 
+    @override
     async def geolocate(self) -> Location:
         response = await self.client.get(self.API_URL)
         response.raise_for_status()

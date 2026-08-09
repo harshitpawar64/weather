@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any
+from typing import Any, override
 
 import msgspec
 
@@ -49,6 +49,7 @@ class OpenMeteoResponse(msgspec.Struct, frozen=True):
 class OpenMeteo(WeatherProvider):
     API_URL = "https://api.open-meteo.com/v1/forecast"
 
+    @override
     async def fetch_weather(
         self, location: Location, unit_system: UnitSystem
     ) -> WeatherData:

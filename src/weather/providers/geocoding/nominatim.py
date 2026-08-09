@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather import __version__
@@ -14,6 +16,7 @@ class NominatimResponse(msgspec.Struct, frozen=True):
 class Nominatim(GeocodingProvider):
     API_URL = "https://nominatim.openstreetmap.org/search"
 
+    @override
     async def geocode(self, query: str) -> Location:
         params: dict[str, str | int] = {
             "q": query,

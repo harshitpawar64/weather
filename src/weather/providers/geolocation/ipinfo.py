@@ -1,3 +1,5 @@
+from typing import override
+
 import msgspec
 
 from weather.models import Location
@@ -20,6 +22,7 @@ class IPInfoResponse(msgspec.Struct, frozen=True):
 class IPInfo(GeolocationProvider):
     API_URL = "https://ipinfo.io"
 
+    @override
     async def geolocate(self) -> Location:
         response = await self.client.get(self.API_URL)
         response.raise_for_status()
