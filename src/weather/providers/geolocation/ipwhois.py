@@ -30,7 +30,8 @@ class IPWhoIs(GeolocationProvider):
 
     @staticmethod
     def _parse_data(data: IPWhoIsResponse) -> Location:
-        display_name = f"{data.city}, {data.region}, {data.country}"
+        parts = (data.city, data.region, data.country)
+        display_name = ", ".join(dict.fromkeys(filter(None, parts)))
 
         return Location(
             latitude=data.latitude, longitude=data.longitude, display_name=display_name

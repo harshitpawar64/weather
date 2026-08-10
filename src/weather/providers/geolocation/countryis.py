@@ -33,7 +33,8 @@ class CountryIs(GeolocationProvider):
 
     @staticmethod
     def _parse_data(data: CountryIsResponse) -> Location:
-        display_name = f"{data.city}, {data.country}"
+        parts = (data.city, data.country)
+        display_name = ", ".join(dict.fromkeys(filter(None, parts)))
 
         return Location(
             latitude=data.location.latitude,

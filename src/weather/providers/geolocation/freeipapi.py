@@ -28,7 +28,8 @@ class FreeIPAPI(GeolocationProvider):
 
     @staticmethod
     def _parse_data(data: FreeIPAPIResponse) -> Location:
-        display_name = f"{data.cityName}, {data.regionName}, {data.countryName}"
+        parts = (data.cityName, data.regionName, data.countryName)
+        display_name = ", ".join(dict.fromkeys(filter(None, parts)))
 
         return Location(
             latitude=data.latitude, longitude=data.longitude, display_name=display_name

@@ -34,7 +34,9 @@ class IPInfo(GeolocationProvider):
     @staticmethod
     def _parse_data(data: IPInfoResponse) -> Location:
         latitude, longitude = data.coordinates
-        display_name = f"{data.city}, {data.region}, {data.country}"
+
+        parts = (data.city, data.region, data.country)
+        display_name = ", ".join(dict.fromkeys(filter(None, parts)))
 
         return Location(
             latitude=latitude, longitude=longitude, display_name=display_name
