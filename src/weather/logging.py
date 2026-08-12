@@ -15,4 +15,5 @@ def setup_logging(verbose: bool) -> None:
         handlers=[
             RichHandler(console=err_console, show_path=False, rich_tracebacks=True)
         ],
+        force=True,
     )
