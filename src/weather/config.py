@@ -1,10 +1,12 @@
+import logging
+from pathlib import Path
+
 import msgspec
 from platformdirs import user_config_path
 
 from weather.models import Location, Theme, UnitSystem
 
-_CONFIG_DIR = user_config_path("weather", "Harshit Pawar")
-_CONFIG_DIR.mkdir(parents=True, exist_ok=True)
+logger = logging.getLogger(__name__)
 
 
 class ConfigData(msgspec.Struct):
@@ -14,15 +16,28 @@ class ConfigData(msgspec.Struct):
 
 
 class Config:
-    def __init__(self):
-        self.file = _CONFIG_DIR / "config.toml"
+    def __init__(self, config_dir: Path | None = None):
+        self.file = (
+            config_dir or user_config_path("weather", ensure_exists=True)
+        ) / "config.toml"
+
         self._data = self._read()
 
     def _read(self) -> ConfigData:
         try:
             return msgspec.toml.decode(self.file.read_bytes(), type=ConfigData)
-        except FileNotFoundError, msgspec.ValidationError, msgspec.DecodeError:
-            return ConfigData()
+        except FileNotFoundError:
+            logger.info(
+                "Config file not found at '%s'. Using default configuration.", self.file
+            )
+        except msgspec.DecodeError as e:
+            logger.warning(
+                "Config file at '%s' is corrupted (%s). Using default configuration.",
+                self.file,
+                e,
+            )
+
+        return ConfigData()
 
     @property
     def location(self) -> Location | None:
@@ -37,14 +52,19 @@ class Config:
         return self._data.theme
 
     def save(
-        self, location: Location | None = None, unit_system: UnitSystem | None = None
+        self,
+        location: Location | None = None,
+        unit_system: UnitSystem | None = None,
+        theme: Theme | None = None,
     ) -> None:
         if not location:
             location = self._data.location
         if not unit_system:
             unit_system = self._data.unit_system
+        if not theme:
+            theme = self._data.theme
 
-        self._data = ConfigData(location=location, unit_system=unit_system)
+        self._data = ConfigData(location=location, unit_system=unit_system, theme=theme)
 
         temp_file = self.file.with_suffix(".tmp")
         temp_file.write_bytes(msgspec.toml.encode(self._data))

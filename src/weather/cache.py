@@ -1,12 +1,13 @@
+import logging
 import time
+from pathlib import Path
 
 import msgspec
 from platformdirs import user_cache_path
 
 from weather.models import AirQuality, Location, UnitSystem, WeatherData
 
-_CACHE_DIR = user_cache_path("weather", "Harshit Pawar")
-_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+logger = logging.getLogger(__name__)
 
 _STALE_MAX_AGE = 604800  # 1 week
 
@@ -22,8 +23,10 @@ class CacheData(msgspec.Struct):
 
 
 class Cache:
-    def __init__(self):
-        self.file = _CACHE_DIR / "cache.bin"
+    def __init__(self, cache_dir: Path | None = None):
+        self.file = (
+            cache_dir or user_cache_path("weather", ensure_exists=True)
+        ) / "cache.bin"
 
         self._encoder = msgspec.msgpack.Encoder()
         self._decoder = msgspec.msgpack.Decoder(type=CacheData)
@@ -33,11 +36,19 @@ class Cache:
     def _read(self) -> CacheData:
         try:
             return self._decoder.decode(self.file.read_bytes())
-        except FileNotFoundError, msgspec.ValidationError, msgspec.DecodeError:
-            return CacheData()
+        except FileNotFoundError:
+            logger.info(
+                "Cache file not found at '%s'. Creating a new cache file...", self.file
+            )
+        except msgspec.DecodeError:
+            logger.info(
+                "Cache file at '%s' is corrupted. Resetting cache...", self.file
+            )
+
+        return CacheData()
 
     def get_location(self, query: str) -> Location | None:
-        return self._data.queries.get(query.lower())
+        return self._data.queries.get(query.strip().lower())
 
     def get_weather(
         self, location: Location, unit_system: UnitSystem, ignore_expiry: bool = False
