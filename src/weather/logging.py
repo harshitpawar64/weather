@@ -11,9 +11,13 @@ def setup_logging(verbose: bool) -> None:
     logging.basicConfig(
         level=level,
         format="%(message)s",
-        datefmt="[%X]",
         handlers=[
-            RichHandler(console=err_console, show_path=False, rich_tracebacks=True)
+            RichHandler(
+                console=err_console,
+                show_time=False,
+                show_path=False,
+                rich_tracebacks=True,
+            )
         ],
         force=True,
     )
