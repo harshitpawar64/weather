@@ -47,6 +47,15 @@ class Cache:
 
         return CacheData()
 
+    def _write(self) -> None:
+        try:
+            temp_file = self.file.with_suffix(".tmp")
+            temp_file.write_bytes(self._encoder.encode(self._data))
+            temp_file.replace(self.file)
+        except OSError as e:
+            temp_file.unlink(missing_ok=True)
+            logger.warning("Failed to write cache file to '%s': %s", self.file, e)
+
     def get_location(self, query: str) -> Location | None:
         return self._data.queries.get(query.strip().lower())
 
@@ -96,11 +105,10 @@ class Cache:
 
         self._data.data[key] = CacheEntry(weather=weather, aqi=aqi)
 
-        self.prune()
+        removed = self.prune()
 
-        temp_file = self.file.with_suffix(".tmp")
-        temp_file.write_bytes(self._encoder.encode(self._data))
-        temp_file.replace(self.file)
+        if not removed:
+            self._write()
 
     def prune(self) -> int:
         now = time.time()
@@ -117,6 +125,8 @@ class Cache:
 
         for key in stale_keys:
             del self._data.data[key]
+
+        self._write()
 
         return len(stale_keys)
 

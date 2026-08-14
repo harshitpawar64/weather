@@ -31,13 +31,18 @@ class Config:
                 "Config file not found at '%s'. Using default configuration.", self.file
             )
         except msgspec.DecodeError as e:
-            logger.warning(
-                "Config file at '%s' is corrupted (%s). Using default configuration.",
-                self.file,
-                e,
-            )
+            logger.error("Config file at '%s' is corrupted. (%s)", self.file, e)
 
         return ConfigData()
+
+    def _write(self) -> None:
+        try:
+            temp_file = self.file.with_suffix(".tmp")
+            temp_file.write_bytes(msgspec.toml.encode(self._data))
+            temp_file.replace(self.file)
+        except OSError as e:
+            temp_file.unlink(missing_ok=True)
+            logger.error("Failed to write config file to '%s': %s", self.file, e)
 
     @property
     def location(self) -> Location | None:
@@ -65,10 +70,7 @@ class Config:
             theme = self._data.theme
 
         self._data = ConfigData(location=location, unit_system=unit_system, theme=theme)
-
-        temp_file = self.file.with_suffix(".tmp")
-        temp_file.write_bytes(msgspec.toml.encode(self._data))
-        temp_file.replace(self.file)
+        self._write()
 
     def clear(self):
         self.file.unlink(missing_ok=True)
