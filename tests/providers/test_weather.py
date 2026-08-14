@@ -54,3 +54,8 @@ async def test_openmeteo_weather():
         assert weather_data.unit_system == UnitSystem.METRIC
         assert len(weather_data.daily) == 1
         assert weather_data.daily[0].temp_max == 25.0
+
+        weather_data_imperial = await provider.fetch_weather(
+            c.LOCATION, UnitSystem.IMPERIAL
+        )
+        assert weather_data_imperial.unit_system == UnitSystem.IMPERIAL

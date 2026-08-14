@@ -3,6 +3,7 @@ import logging
 import httpx
 import msgspec
 
+from weather.exceptions import ProviderError, ServiceError
 from weather.models import Location
 from weather.providers.geolocation import (
     CountryIs,
@@ -26,10 +27,12 @@ class GeolocationService:
 
     async def geolocate(self) -> Location:
         for provider in self.providers:
+            if not provider.is_configured:
+                continue
             try:
                 return await provider.geolocate()
-            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         logger.error("All geolocation providers failed.")
-        raise RuntimeError("All geolocation providers failed.")
+        raise ServiceError("All geolocation providers failed.")

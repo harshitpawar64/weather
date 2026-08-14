@@ -4,6 +4,7 @@ import httpx
 import msgspec
 
 from weather.cache import Cache
+from weather.exceptions import ProviderError, ServiceError
 from weather.models import Location
 from weather.providers.geocoding import GeocodingProvider, Nominatim, OpenMeteo
 
@@ -24,10 +25,12 @@ class GeocodingService:
             return cached_data
 
         for provider in self.providers:
+            if not provider.is_configured:
+                continue
             try:
                 return await provider.geocode(query)
-            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         logger.error("All geocoding providers failed.")
-        raise RuntimeError("All geocoding providers failed.")
+        raise ServiceError("All geocoding providers failed.")

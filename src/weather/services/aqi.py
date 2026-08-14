@@ -4,6 +4,7 @@ import httpx
 import msgspec
 
 from weather.cache import Cache
+from weather.exceptions import ProviderError, ServiceError
 from weather.models import AirQuality, Location
 from weather.providers.aqi import AQIProvider, OpenMeteo, OpenWeather
 
@@ -26,13 +27,15 @@ class AQIService:
             return cached_data
 
         for provider in self.providers:
+            if not provider.is_configured:
+                continue
             try:
                 return await provider.fetch_aqi(location)
-            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_aqi(location, ignore_expiry=True):
             return stale_cache
 
         logger.error("All AQI providers failed.")
-        raise RuntimeError("All AQI providers failed.")
+        raise ServiceError("All AQI providers failed.")

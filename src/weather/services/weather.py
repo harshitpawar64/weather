@@ -4,6 +4,7 @@ import httpx
 import msgspec
 
 from weather.cache import Cache
+from weather.exceptions import ProviderError, ServiceError
 from weather.models import Location, UnitSystem, WeatherData
 from weather.providers.weather import OpenMeteo, WeatherProvider
 
@@ -25,9 +26,11 @@ class WeatherService:
             return cached_data
 
         for provider in self.providers:
+            if not provider.is_configured:
+                continue
             try:
                 return await provider.fetch_weather(location, unit_system)
-            except (httpx.HTTPError, msgspec.DecodeError, ValueError) as e:
+            except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
                 logger.warning("%s failed: %s", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_weather(
@@ -36,4 +39,4 @@ class WeatherService:
             return stale_cache
 
         logger.error("All weather providers failed.")
-        raise RuntimeError("All weather providers failed.")
+        raise ServiceError("All weather providers failed.")

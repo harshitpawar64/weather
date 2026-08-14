@@ -3,6 +3,7 @@ from typing import override
 import msgspec
 
 from weather import __version__
+from weather.exceptions import LocationNotFoundError
 from weather.models import Location
 from weather.providers.geocoding.base import GeocodingProvider
 
@@ -33,7 +34,7 @@ class Nominatim(GeocodingProvider):
         data = msgspec.json.decode(response.content, type=list[NominatimResponse])
 
         if not data:
-            raise ValueError(f"No location found for query: '{query}'")
+            raise LocationNotFoundError(f"No location found for query: '{query}'")
 
         return self._parse_data(data[0])
 

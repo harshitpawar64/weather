@@ -2,6 +2,7 @@ import httpx
 import pytest
 
 import tests.constants as c
+from weather.exceptions import ProviderError
 from weather.models import UnixTimestamp
 from weather.providers.aqi import OpenMeteo, OpenWeather
 from weather.providers.aqi.openmeteo import OpenMeteoCurrentResponse, OpenMeteoResponse
@@ -60,6 +61,7 @@ async def test_openweather_unconfigured(monkeypatch: pytest.MonkeyPatch):
         provider = OpenWeather(client)
         assert provider.is_configured is False
         with pytest.raises(
-            RuntimeError, match="OPENWEATHER_API_KEY environment variable is not set"
+            ProviderError,
+            match="OPENWEATHER_API_KEY environment variable is not set or is empty.",
         ):
             await provider.fetch_aqi(c.LOCATION)

@@ -2,6 +2,7 @@ from typing import override
 
 import msgspec
 
+from weather.exceptions import LocationNotFoundError
 from weather.models import Location
 from weather.providers.geocoding.base import GeocodingProvider
 
@@ -34,7 +35,7 @@ class OpenMeteo(GeocodingProvider):
         data = msgspec.json.decode(response.content, type=OpenMeteoResponse)
 
         if not data.results:
-            raise ValueError(f"No location found for query: '{query}'")
+            raise LocationNotFoundError(f"No location found for query: '{query}'")
 
         return self._parse_data(data.results[0])
 

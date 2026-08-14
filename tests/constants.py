@@ -8,6 +8,7 @@ CITY = "City"
 REGION = "Region"
 COUNTRY = "Country"
 DISPLAY_NAME = f"{CITY}, {REGION}, {COUNTRY}"
+QUERY = "test query"
 
 LOCATION = Location(latitude=LATITUDE, longitude=LONGITUDE, display_name=DISPLAY_NAME)
 ENCODER = msgspec.json.Encoder()

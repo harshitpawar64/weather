@@ -3,6 +3,7 @@ from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
 
 from weather import __version__
+from weather.exceptions import ServiceError
 from weather.models import Location, UnitSystem
 from weather.services import GeocodingService, GeolocationService
 
@@ -41,7 +42,7 @@ async def _choose_location(
     try:
         with console.status("[cyan]Detecting your location...[/]", spinner="dots"):
             suggested = await geolocator.geolocate()
-    except RuntimeError:
+    except ServiceError:
         console.print(
             "[yellow]Could not automatically detect your location. Let's enter one manually.[/]"
         )
@@ -61,7 +62,7 @@ async def _choose_location(
         try:
             with console.status(f"[cyan]Searching for '{query}'...[/]", spinner="dots"):
                 return await geocoder.geocode(query)
-        except RuntimeError:
+        except ServiceError:
             console.print("[yellow]Could not find that location. Please try again.[/]")
 
 

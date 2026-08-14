@@ -2,6 +2,7 @@ import httpx
 import pytest
 
 import tests.constants as c
+from weather.exceptions import LocationNotFoundError
 from weather.providers.geocoding import Nominatim, OpenMeteo
 from weather.providers.geocoding.nominatim import NominatimResponse
 from weather.providers.geocoding.openmeteo import (
@@ -22,7 +23,7 @@ async def test_nominatim_geocoding():
 
     async with httpx.AsyncClient(transport=transport) as client:
         provider = Nominatim(client)
-        location = await provider.geocode("test query")
+        location = await provider.geocode(c.QUERY)
 
         assert location.latitude == c.LATITUDE
         assert location.longitude == c.LONGITUDE
@@ -36,8 +37,8 @@ async def test_nominatim_geocoding_not_found():
 
     async with httpx.AsyncClient(transport=transport) as client:
         provider = Nominatim(client)
-        with pytest.raises(ValueError, match="No location found"):
-            await provider.geocode("test query")
+        with pytest.raises(LocationNotFoundError, match="No location found"):
+            await provider.geocode(c.QUERY)
 
 
 async def test_openmeteo_geocoding():
@@ -58,7 +59,7 @@ async def test_openmeteo_geocoding():
 
     async with httpx.AsyncClient(transport=transport) as client:
         provider = OpenMeteo(client)
-        location = await provider.geocode("test query")
+        location = await provider.geocode(c.QUERY)
 
         assert location.latitude == c.LATITUDE
         assert location.longitude == c.LONGITUDE
@@ -72,5 +73,5 @@ async def test_openmeteo_geocoding_not_found():
 
     async with httpx.AsyncClient(transport=transport) as client:
         provider = OpenMeteo(client)
-        with pytest.raises(ValueError, match="No location found"):
-            await provider.geocode("test query")
+        with pytest.raises(LocationNotFoundError, match="No location found"):
+            await provider.geocode(c.QUERY)

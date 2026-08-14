@@ -4,6 +4,8 @@ from typing import ClassVar
 
 import httpx
 
+from weather.exceptions import ProviderError
+
 
 class Provider(ABC):
     API_URL: ClassVar[str] = ""
@@ -23,6 +25,8 @@ class Provider(ABC):
     @property
     def required_api_key(self) -> str:
         if not self.api_key:
-            raise RuntimeError(f"{self.API_KEY_ENV} environment variable is not set")
+            raise ProviderError(
+                f"{self.API_KEY_ENV} environment variable is not set or is empty."
+            )
 
         return self.api_key
