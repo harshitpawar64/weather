@@ -35,7 +35,7 @@ def _forecast_panels(response: WeatherResponse, days: int) -> Columns:
     weather = response.weather
     units = weather.unit_system
     panels = (_forecast_panel(day, units) for day in weather.daily[1:days])
-    return Columns(panels, equal=True, expand=True)
+    return Columns(panels, equal=True, padding=(0, 3))
 
 
 def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:

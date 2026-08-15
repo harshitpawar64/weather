@@ -84,7 +84,6 @@ _FOG = (
     "[grey74]  _ - _ - _ [/]\n"
     "[grey74] _ - _ - _ -[/]\n"
     "[grey74]  _ - _ - _ [/]\n"
-    "\n"
 )
 
 _RIME_FOG = (
@@ -92,7 +91,6 @@ _RIME_FOG = (
     f"[grey74]  _ {SNOW} _ - {SNOW} -[/]\n"
     f"[grey74] _ - _ {SNOW} _ -[/]\n"
     f"[grey74]  _ {SNOW} _ - {SNOW} -[/]\n"
-    "\n"
 )
 
 _DRIZZLE_LIGHT = (
