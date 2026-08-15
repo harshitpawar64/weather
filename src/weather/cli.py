@@ -3,7 +3,6 @@ from typing import Annotated
 
 import typer
 
-import weather.app
 from weather import __version__
 from weather.cache import Cache
 from weather.config import Config
@@ -46,6 +45,17 @@ def cache_clear() -> None:
 @cache_app.command("path")
 def cache_path() -> None:
     print(Cache().file.resolve())
+
+
+@app.command("setup", help="Run interactive onboarding setup")
+def setup() -> None:
+    import weather.app
+
+    try:
+        asyncio.run(weather.app.run_setup())
+    except KeyboardInterrupt:
+        typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
+        raise typer.Exit(130)
 
 
 def validate_units(ctx: typer.Context) -> UnitSystem:
@@ -130,6 +140,8 @@ def main(
 
     unit_system = validate_units(ctx)
     theme = validate_theme(ctx)
+
+    import weather.app
 
     try:
         asyncio.run(weather.app.run(location, unit_system, theme, days, json_output))

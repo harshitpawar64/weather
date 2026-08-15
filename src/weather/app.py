@@ -15,6 +15,9 @@ from weather.services import (
 )
 from weather.ui.render import render_weather
 
+cache = Cache()
+config = Config()
+
 
 async def run(
     query: str | None,
@@ -22,10 +25,7 @@ async def run(
     theme: Theme,
     days: int,
     json_output: bool,
-):
-    cache = Cache()
-    config = Config()
-
+) -> None:
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
             geocoder = GeocodingService(client, cache)
@@ -57,3 +57,11 @@ async def run(
         return
 
     render_weather(response, theme, days)
+
+
+async def run_setup() -> None:
+    async with httpx.AsyncClient(timeout=10.0) as client:
+        location, unit_system = await onboarding(
+            GeolocationService(client), GeocodingService(client, cache)
+        )
+        config.save(location, unit_system)
