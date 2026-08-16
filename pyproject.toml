@@ -5,7 +5,7 @@ description = "A fast terminal weather client"
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "Harshit Pawar", email = "hpchess64@gmail.com" }]
-requires-python = ">=3.14"
+requires-python = ">=3.12"
 dependencies = [
     "httpx>=0.28.1",
     "msgspec>=0.21.1",

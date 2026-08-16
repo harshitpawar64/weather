@@ -1,7 +1,7 @@
 # weather ⛅
 
 [![CI](https://github.com/harshitpawar64/weather/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/harshitpawar64/weather/actions/workflows/ci.yml)
-[![python](https://img.shields.io/badge/Python-3.14-35c555.svg?logo=python&labelColor=31373c&logoColor=skyblue)](https://www.python.org/)
+[![python](https://img.shields.io/badge/Python-3.12_|_3.13_|_3.14-35c555.svg?logo=python&labelColor=31373c&logoColor=skyblue)](https://www.python.org/)
 
 [![uv](https://img.shields.io/badge/uv-black.svg?logo=uv)](https://docs.astral.sh/uv/)
 [![ruff](https://img.shields.io/badge/ruff-black.svg?logo=ruff)](https://docs.astral.sh/ruff/)

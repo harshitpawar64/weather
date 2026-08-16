@@ -89,7 +89,7 @@ def format_updated(value: str) -> str:
             return f"[dim]Updated {diff_minutes // 60}h ago[/]"
 
         return f"[dim]Updated {diff_minutes // 1440}d ago[/]"
-    except ValueError, TypeError:
+    except (ValueError, TypeError):
         return value
 
 
