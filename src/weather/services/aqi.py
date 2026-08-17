@@ -22,7 +22,9 @@ class AQIService:
     async def get_aqi(self, location: Location) -> AirQuality:
         if cached_data := self.cache.get_aqi(location):
             logger.info(
-                f"AQI cache hit for coordinates: ({location.latitude}, {location.longitude})"
+                "AQI cache hit for coordinates: (%s, %s)",
+                location.latitude,
+                location.longitude,
             )
             return cached_data
 

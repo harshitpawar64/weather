@@ -21,7 +21,9 @@ class WeatherService:
     ) -> WeatherData:
         if cached_data := self.cache.get_weather(location, unit_system):
             logger.info(
-                f"Weather cache hit for coordinates: ({location.latitude}, {location.longitude})"
+                "Weather cache hit for coordinates: (%s, %s)",
+                location.latitude,
+                location.longitude,
             )
             return cached_data
 

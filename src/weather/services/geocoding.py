@@ -21,7 +21,7 @@ class GeocodingService:
 
     async def geocode(self, query: str) -> Location:
         if cached_data := self.cache.get_location(query):
-            logger.info(f"Geocoding cache hit for query: '{query}'")
+            logger.info("Geocoding cache hit for query: '%s'", query)
             return cached_data
 
         for provider in self.providers:
