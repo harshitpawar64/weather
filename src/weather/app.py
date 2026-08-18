@@ -45,7 +45,14 @@ async def run(
         weather, aqi = await asyncio.gather(
             weather_service.get_weather(location, unit_system),
             aqi_service.get_aqi(location),
+            return_exceptions=True,
         )
+
+        if isinstance(weather, BaseException):
+            raise weather
+
+        if isinstance(aqi, BaseException):
+            aqi = None
 
     cache.save(location, weather, aqi, query)
 

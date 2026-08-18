@@ -81,4 +81,4 @@ class WeatherData(msgspec.Struct, frozen=True):
 class WeatherResponse(msgspec.Struct, frozen=True):
     location: Location
     weather: WeatherData
-    aqi: AirQuality
+    aqi: AirQuality | None

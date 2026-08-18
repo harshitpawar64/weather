@@ -95,7 +95,7 @@ class Cache:
         self,
         location: Location,
         weather: WeatherData,
-        aqi: AirQuality,
+        aqi: AirQuality | None = None,
         query: str | None = None,
     ) -> None:
         if query:

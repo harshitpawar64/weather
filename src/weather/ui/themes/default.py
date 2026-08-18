@@ -2,7 +2,7 @@ from rich.align import Align
 from rich.console import Group
 from rich.table import Table
 
-from weather.models import WeatherResponse
+from weather.models import AirQuality, WeatherResponse
 from weather.ui.conditions import weather_condition
 from weather.ui.presentation import (
     aqi_category,
@@ -44,22 +44,28 @@ def render_overview(response: WeatherResponse) -> Group:
         f"{current.precipitation:g} {units.precipitation} | {format_precipitation(today.precipitation_prob_max)}",
     )
 
-    aqi_table = Table.grid(padding=(0, 3))
-    aqi_table.add_column(style="dim")
-    aqi_table.add_column(style="bold white")
+    columns = [condition.icon, current_table]
 
-    aqi_table.add_row("AQI", aqi_category(aqi.us_aqi))
-    aqi_table.add_row("PM2.5", f"{aqi.pm_2_5} µg/m³")
-    aqi_table.add_row("PM10", f"{aqi.pm_10} µg/m³")
+    if aqi:
+        columns.append(_render_aqi(aqi))
 
     layout = Table.grid(padding=(1, 4))
-    layout.add_column(justify="left")
-    layout.add_column(justify="left")
-    layout.add_column(justify="left")
-    layout.add_row(condition.icon, current_table, aqi_table)
+    layout.add_row(*columns)
 
     return Group(
         f"[bold green]📍 {response.location.display_name}[/]\n",
         layout,
         Align.right(format_updated(current.time)),
     )
+
+
+def _render_aqi(aqi: AirQuality) -> Table:
+    table = Table.grid(padding=(0, 3))
+    table.add_column(style="dim")
+    table.add_column(style="bold white")
+
+    table.add_row("AQI", aqi_category(aqi.us_aqi))
+    table.add_row("PM2.5", f"{aqi.pm_2_5} µg/m³")
+    table.add_row("PM10", f"{aqi.pm_10} µg/m³")
+
+    return table
