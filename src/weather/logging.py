@@ -21,3 +21,6 @@ def setup_logging(verbose: bool) -> None:
         ],
         force=True,
     )
+
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("httpcore").setLevel(logging.WARNING)

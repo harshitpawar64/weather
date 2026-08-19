@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from typing import Annotated
 
 import typer
@@ -6,8 +7,11 @@ import typer
 from weather import __version__
 from weather.cache import Cache
 from weather.config import Config
+from weather.exceptions import WeatherError
 from weather.logging import setup_logging
 from weather.models import Theme, UnitSystem
+
+logger = logging.getLogger(__name__)
 
 app = typer.Typer()
 cache_app = typer.Typer(help="Manage cache")
@@ -133,10 +137,10 @@ def main(
         ),
     ] = None,
 ):
+    setup_logging(verbose)
+
     if ctx.invoked_subcommand:
         return
-
-    setup_logging(verbose)
 
     unit_system = validate_units(ctx)
     theme = validate_theme(ctx)
@@ -145,6 +149,9 @@ def main(
 
     try:
         asyncio.run(weather.app.run(location, unit_system, theme, days, json_output))
+    except WeatherError as e:
+        logger.error("%s", e)
+        raise typer.Exit(1)
     except KeyboardInterrupt:
         typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
         raise typer.Exit(130)

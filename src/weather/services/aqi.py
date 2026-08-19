@@ -39,5 +39,4 @@ class AQIService:
         if stale_cache := self.cache.get_aqi(location, ignore_expiry=True):
             return stale_cache
 
-        logger.error("All AQI providers failed.")
         raise ServiceError("All AQI providers failed.")

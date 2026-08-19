@@ -34,5 +34,4 @@ class GeolocationService:
             except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
                 logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
-        logger.error("All geolocation providers failed.")
         raise ServiceError("All geolocation providers failed.")

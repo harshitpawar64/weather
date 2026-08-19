@@ -40,5 +40,4 @@ class WeatherService:
         ):
             return stale_cache
 
-        logger.error("All weather providers failed.")
         raise ServiceError("All weather providers failed.")
