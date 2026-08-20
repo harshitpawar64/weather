@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 import httpx
 
 import tests.constants as c
@@ -12,9 +14,11 @@ from weather.providers.weather.openmeteo import (
 )
 
 
-async def test_openmeteo_weather():
+async def test_openmeteo_weather(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
     current_payload = OpenMeteoCurrentResponse(
-        time="1970-01-01T00:00",
+        time=c.TIME,
         interval=900,
         weather_code=0,
         temperature_2m=20.0,
@@ -27,25 +31,21 @@ async def test_openmeteo_weather():
         is_day=1,
     )
     daily_payload = OpenMeteoDailyResponse(
-        time=["1970-01-01"],
+        time=[c.DATE],
         weather_code=[0],
         temperature_2m_min=[15.0],
         temperature_2m_max=[25.0],
         precipitation_sum=[0.0],
         precipitation_probability_max=[10],
         wind_speed_10m_max=[15.0],
-        sunrise=["1970-01-01T05:00"],
-        sunset=["1970-01-01T21:00"],
+        sunrise=[c.SUNRISE],
+        sunset=[c.SUNSET],
     )
     payload = OpenMeteoWeatherResponse(
         utc_offset_seconds=0, current=current_payload, daily=daily_payload
     )
 
-    transport = httpx.MockTransport(
-        lambda req: httpx.Response(200, content=c.ENCODER.encode(payload))
-    )
-
-    async with httpx.AsyncClient(transport=transport) as client:
+    async with mock_http_client(payload) as client:
         provider = OpenMeteo(client)
         weather_data = await provider.fetch_weather(c.LOCATION, UnitSystem.METRIC)
 

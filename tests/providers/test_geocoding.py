@@ -1,3 +1,5 @@
+from collections.abc import Callable
+
 import httpx
 import pytest
 
@@ -11,17 +13,16 @@ from weather.providers.geocoding.openmeteo import (
 )
 
 
-async def test_nominatim_geocoding():
+async def test_nominatim_geocoding(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
     payload = [
         NominatimResponse(
             lat=str(c.LATITUDE), lon=str(c.LONGITUDE), display_name=c.DISPLAY_NAME
         )
     ]
-    transport = httpx.MockTransport(
-        lambda req: httpx.Response(200, content=c.ENCODER.encode(payload))
-    )
 
-    async with httpx.AsyncClient(transport=transport) as client:
+    async with mock_http_client(payload) as client:
         provider = Nominatim(client)
         location = await provider.geocode(c.QUERY)
 
@@ -30,18 +31,18 @@ async def test_nominatim_geocoding():
         assert location.display_name == c.DISPLAY_NAME
 
 
-async def test_nominatim_geocoding_not_found():
-    transport = httpx.MockTransport(
-        lambda req: httpx.Response(200, content=c.ENCODER.encode([]))
-    )
-
-    async with httpx.AsyncClient(transport=transport) as client:
+async def test_nominatim_geocoding_not_found(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
+    async with mock_http_client([]) as client:
         provider = Nominatim(client)
         with pytest.raises(LocationNotFoundError, match="No location found"):
             await provider.geocode(c.QUERY)
 
 
-async def test_openmeteo_geocoding():
+async def test_openmeteo_geocoding(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
     payload = OpenMeteoResponse(
         results=[
             OpenMeteoResultResponse(
@@ -53,11 +54,8 @@ async def test_openmeteo_geocoding():
             )
         ]
     )
-    transport = httpx.MockTransport(
-        lambda req: httpx.Response(200, content=c.ENCODER.encode(payload))
-    )
 
-    async with httpx.AsyncClient(transport=transport) as client:
+    async with mock_http_client(payload) as client:
         provider = OpenMeteo(client)
         location = await provider.geocode(c.QUERY)
 
@@ -66,12 +64,10 @@ async def test_openmeteo_geocoding():
         assert location.display_name == c.DISPLAY_NAME
 
 
-async def test_openmeteo_geocoding_not_found():
-    transport = httpx.MockTransport(
-        lambda req: httpx.Response(200, content=c.ENCODER.encode(OpenMeteoResponse([])))
-    )
-
-    async with httpx.AsyncClient(transport=transport) as client:
+async def test_openmeteo_geocoding_not_found(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
+    async with mock_http_client(OpenMeteoResponse([])) as client:
         provider = OpenMeteo(client)
         with pytest.raises(LocationNotFoundError, match="No location found"):
             await provider.geocode(c.QUERY)

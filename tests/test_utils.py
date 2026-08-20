@@ -1,11 +1,12 @@
 from datetime import UTC, datetime, timedelta
 
+import tests.constants as c
 from weather.models import UnixTimestamp
 from weather.utils import calculate_valid_until, get_us_aqi, parse_datetime
 
 
 def test_parse_datetime_utc() -> None:
-    dt = parse_datetime("1970-01-01T00:00", 0)
+    dt = parse_datetime(c.TIME, 0)
     assert dt.year == 1970
     assert dt.month == 1
     assert dt.day == 1
@@ -15,12 +16,12 @@ def test_parse_datetime_utc() -> None:
 
 
 def test_parse_datetime_positive_offset() -> None:
-    dt = parse_datetime("1970-01-01T00:00", 3600)
+    dt = parse_datetime(c.TIME, 3600)
     assert dt.utcoffset() == timedelta(seconds=3600)
 
 
 def test_parse_datetime_negative_offset() -> None:
-    dt = parse_datetime("1970-01-01T00:00", -3600)
+    dt = parse_datetime(c.TIME, -3600)
     assert dt.utcoffset() == timedelta(seconds=-3600)
 
 
