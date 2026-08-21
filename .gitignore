@@ -23,10 +23,5 @@ htmlcov/
 venv/
 env/
 
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
 # ruff
 .ruff_cache/
