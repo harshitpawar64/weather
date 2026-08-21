@@ -33,9 +33,7 @@ async def test_aqi_service_cache_hit(
 
 
 async def test_aqi_service_primary_provider_success(
-    cache: Cache,
-    make_aqi: Callable[..., AirQuality],
-    mock_client: MagicMock,
+    cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
 
@@ -56,9 +54,7 @@ async def test_aqi_service_primary_provider_success(
 
 
 async def test_aqi_service_fallback_to_secondary_provider(
-    cache: Cache,
-    make_aqi: Callable[..., AirQuality],
-    mock_client: MagicMock,
+    cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
 
@@ -81,9 +77,7 @@ async def test_aqi_service_fallback_to_secondary_provider(
 
 
 async def test_aqi_service_skips_unconfigured_provider(
-    cache: Cache,
-    make_aqi: Callable[..., AirQuality],
-    mock_client: MagicMock,
+    cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
 
@@ -127,8 +121,7 @@ async def test_aqi_service_fallback_to_stale_cache(
 
 
 async def test_aqi_service_all_providers_fail_no_cache(
-    cache: Cache,
-    mock_client: MagicMock,
+    cache: Cache, mock_client: MagicMock
 ) -> None:
     failing_provider = AsyncMock()
     failing_provider.is_configured = True

@@ -27,9 +27,7 @@ async def test_geolocation_service_primary_provider_success(
     mock_secondary.geolocate.assert_not_called()
 
 
-async def test_geolocation_service_fallback_chain(
-    mock_client: MagicMock,
-) -> None:
+async def test_geolocation_service_fallback_chain(mock_client: MagicMock) -> None:
     mock_1 = AsyncMock()
     mock_1.is_configured = True
     mock_1.geolocate.side_effect = httpx.ConnectError("Connection failed")
@@ -57,9 +55,7 @@ async def test_geolocation_service_fallback_chain(
     mock_4.geolocate.assert_awaited_once()
 
 
-async def test_geolocation_service_all_providers_fail(
-    mock_client: MagicMock,
-) -> None:
+async def test_geolocation_service_all_providers_fail(mock_client: MagicMock) -> None:
     mock_1 = AsyncMock()
     mock_1.is_configured = True
     mock_1.geolocate.side_effect = httpx.HTTPError("HTTP error")

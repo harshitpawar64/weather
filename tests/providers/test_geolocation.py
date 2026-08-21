@@ -4,10 +4,7 @@ import httpx
 
 import tests.constants as c
 from weather.providers.geolocation import CountryIs, FreeIPAPI, IPInfo, IPWhoIs
-from weather.providers.geolocation.countryis import (
-    CountryIsLocation,
-    CountryIsResponse,
-)
+from weather.providers.geolocation.countryis import CountryIsLocation, CountryIsResponse
 from weather.providers.geolocation.freeipapi import FreeIPAPIResponse
 from weather.providers.geolocation.ipinfo import IPInfoResponse
 from weather.providers.geolocation.ipwhois import IPWhoIsResponse

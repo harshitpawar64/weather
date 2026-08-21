@@ -31,10 +31,15 @@ dev = [
     "ty>=0.0.71",
 ]
 
+[tool.ruff.format]
+skip-magic-trailing-comma = true
 
 [tool.ruff.lint]
 extend-select = ["I"]
 
+[tool.ruff.lint.isort]
+split-on-trailing-comma = false
+
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-addopts = "--cov=weather --cov-report=term-missing --cov-branch"
+addopts = "--cov=weather --cov-report=term-missing --cov-branch -v"

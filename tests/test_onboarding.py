@@ -38,8 +38,7 @@ async def test_onboarding_auto_location_declined_manual_success(
 
     monkeypatch.setattr("weather.onboarding.Confirm.ask", lambda *a, **k: False)
     monkeypatch.setattr(
-        "weather.onboarding.Prompt.ask",
-        MagicMock(side_effect=[c.QUERY, "imperial"]),
+        "weather.onboarding.Prompt.ask", MagicMock(side_effect=[c.QUERY, "imperial"])
     )
 
     location, unit_system = await onboarding(mock_geolocator, mock_geocoder)
@@ -58,10 +57,7 @@ async def test_onboarding_geolocator_error_manual_retry(
     )
 
     mock_geocoder = AsyncMock()
-    mock_geocoder.geocode.side_effect = [
-        ServiceError("Search failed"),
-        c.LOCATION,
-    ]
+    mock_geocoder.geocode.side_effect = [ServiceError("Search failed"), c.LOCATION]
 
     monkeypatch.setattr(
         "weather.onboarding.Prompt.ask",

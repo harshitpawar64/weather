@@ -52,10 +52,7 @@ DAILY_FORECAST = DailyForecast(
 )
 
 AIR_QUALITY = AirQuality(
-    us_aqi=42.0,
-    pm_2_5=9.2,
-    pm_10=18.5,
-    valid_until=UnixTimestamp(0.0),
+    us_aqi=42.0, pm_2_5=9.2, pm_10=18.5, valid_until=UnixTimestamp(0.0)
 )
 
 WEATHER_DATA = WeatherData(

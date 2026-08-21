@@ -35,8 +35,7 @@ async def test_openmeteo_aqi_fetch(
 
 
 async def test_openweather_aqi_fetch(
-    monkeypatch: pytest.MonkeyPatch,
-    mock_http_client: Callable[..., httpx.AsyncClient],
+    monkeypatch: pytest.MonkeyPatch, mock_http_client: Callable[..., httpx.AsyncClient]
 ) -> None:
     monkeypatch.setenv("OPENWEATHER_API_KEY", "test_key")
     components = OpenWeatherComponents(pm2_5=5.0, pm10=25.0)

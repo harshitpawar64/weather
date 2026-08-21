@@ -16,11 +16,7 @@ def test_config_default_when_file_missing(config: Config) -> None:
 
 def test_config_save_and_read(tmp_path: Path) -> None:
     cfg1 = Config(config_dir=tmp_path)
-    cfg1.save(
-        location=c.LOCATION,
-        unit_system=UnitSystem.IMPERIAL,
-        theme=Theme.DEFAULT,
-    )
+    cfg1.save(location=c.LOCATION, unit_system=UnitSystem.IMPERIAL, theme=Theme.DEFAULT)
 
     cfg2 = Config(config_dir=tmp_path)
     assert cfg2.location == c.LOCATION

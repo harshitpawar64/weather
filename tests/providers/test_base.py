@@ -24,9 +24,7 @@ def test_provider_without_api_key_env() -> None:
     assert provider.is_configured is True
 
 
-def test_provider_with_api_key_configured(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_provider_with_api_key_configured(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("TEST_API_KEY", "secret_123")
     client = MagicMock(spec=httpx.AsyncClient)
     provider = DummyKeyRequiredProvider(client)
@@ -36,9 +34,7 @@ def test_provider_with_api_key_configured(
     assert provider.required_api_key == "secret_123"
 
 
-def test_provider_with_api_key_unconfigured(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_provider_with_api_key_unconfigured(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.delenv("TEST_API_KEY", raising=False)
     client = MagicMock(spec=httpx.AsyncClient)
     provider = DummyKeyRequiredProvider(client)
@@ -46,7 +42,6 @@ def test_provider_with_api_key_unconfigured(
     assert provider.api_key is None
     assert provider.is_configured is False
     with pytest.raises(
-        ProviderError,
-        match="TEST_API_KEY environment variable is not set or is empty.",
+        ProviderError, match="TEST_API_KEY environment variable is not set or is empty."
     ):
         _ = provider.required_api_key
