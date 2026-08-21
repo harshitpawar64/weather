@@ -18,10 +18,10 @@ A fast, beautiful terminal weather client with multi-provider fallbacks, AQI met
 
 ```bash
 # With uv (recommended)
-uv tool install git+https://github.com/harshitpawar64/weather.git
+uv tool install weathr
 
-# Or with pipx
-pipx install git+https://github.com/harshitpawar64/weather.git
+# With pipx
+pipx install weathr
 ```
 
 ---
