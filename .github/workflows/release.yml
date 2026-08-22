@@ -26,15 +26,16 @@ jobs:
         id: release-please
 
   pypi-publish:
-    name: Publish to PyPI & GitHub Release
+    name: Publish to PyPI
     needs: release-please
     if: ${{ needs.release-please.outputs.release_created == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    environment: pypi
+    environment:
+      name: pypi
+      url: https://pypi.org/project/weathr/
     permissions:
       id-token: write
-      contents: write
     steps:
       - name: Checkout tag
         uses: actions/checkout@v7.0.1
@@ -42,7 +43,7 @@ jobs:
           ref: ${{ needs.release-please.outputs.tag_name }}
 
       - name: Setup uv
-        uses: astral-sh/setup-uv@v10.0.0
+        uses: astral-sh/setup-uv@v10.0.1
         with:
           version: "latest-known"
 
@@ -51,8 +52,3 @@ jobs:
 
       - name: Publish package to PyPI
         run: uv publish
-
-      - name: Upload artifacts to GitHub Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh release upload ${{ needs.release-please.outputs.tag_name }} dist/*.whl --clobber
