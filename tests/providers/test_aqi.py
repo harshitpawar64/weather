@@ -53,6 +53,20 @@ async def test_openweather_aqi_fetch(
         assert aqi_data.valid_until == 3600.0
 
 
+async def test_openweather_empty_response(
+    monkeypatch: pytest.MonkeyPatch, mock_http_client: Callable[..., httpx.AsyncClient]
+) -> None:
+    monkeypatch.setenv("OPENWEATHER_API_KEY", "test_key")
+    payload = OpenWeatherResponse(items=[])
+
+    async with mock_http_client(payload) as client:
+        provider = OpenWeather(client)
+        with pytest.raises(
+            ProviderError, match="No AQI data returned from OpenWeather."
+        ):
+            await provider.fetch_aqi(c.LOCATION)
+
+
 async def test_openweather_unconfigured(
     monkeypatch: pytest.MonkeyPatch, mock_client: MagicMock
 ) -> None:

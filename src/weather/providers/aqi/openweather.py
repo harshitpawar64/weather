@@ -2,6 +2,7 @@ from typing import Any, override
 
 import msgspec
 
+from weather.exceptions import ProviderError
 from weather.models import AirQuality, Location, UnixTimestamp
 from weather.providers.aqi.base import AQIProvider
 from weather.utils import get_us_aqi
@@ -37,6 +38,9 @@ class OpenWeather(AQIProvider):
         response.raise_for_status()
 
         data = msgspec.json.decode(response.content, type=OpenWeatherResponse)
+
+        if not data.items:
+            raise ProviderError("No AQI data returned from OpenWeather.")
 
         return self._parse_data(data.items[0])
 
