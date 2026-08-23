@@ -33,7 +33,7 @@ class WeatherService:
             try:
                 return await provider.fetch_weather(location, unit_system)
             except (httpx.HTTPError, msgspec.DecodeError, ProviderError) as e:
-                logger.warning("%s failed: %s", provider.__class__.__name__, e)
+                logger.warning("%s failed: %s.", provider.__class__.__name__, e)
 
         if stale_cache := self.cache.get_weather(
             location, unit_system, ignore_expiry=True
