@@ -5,8 +5,7 @@ from typing import Annotated
 import typer
 
 from weather import __version__
-from weather.cache import Cache
-from weather.config import Config
+from weather.cli import cache, config, setup
 from weather.exceptions import WeatherError
 from weather.logging import setup_logging
 from weather.models import Theme, UnitSystem
@@ -14,58 +13,13 @@ from weather.models import Theme, UnitSystem
 logger = logging.getLogger(__name__)
 
 app = typer.Typer()
-cache_app = typer.Typer(help="Manage cache")
-config_app = typer.Typer(help="Manage config")
 
-app.add_typer(config_app, name="config")
-app.add_typer(cache_app, name="cache")
-
-
-@config_app.command("path")
-def config_path() -> None:
-    print(Config().file.resolve())
+app.add_typer(setup.app)
+app.add_typer(cache.app)
+app.add_typer(config.app)
 
 
-@cache_app.command("prune")
-def cache_prune() -> None:
-    removed = Cache().prune()
-    if removed:
-        typer.secho(
-            f"✓ Pruned {removed} expired cache {'entry' if removed == 1 else 'entries'}.",
-            fg=typer.colors.GREEN,
-        )
-    else:
-        typer.secho(
-            "• Cache is already clean. No expired entries found.", fg=typer.colors.BLUE
-        )
-
-
-@cache_app.command("clear")
-def cache_clear() -> None:
-    Cache().clear()
-    typer.secho("✓ Cache cleared successfully.", fg=typer.colors.GREEN)
-
-
-@cache_app.command("path")
-def cache_path() -> None:
-    print(Cache().file.resolve())
-
-
-@app.command("setup", help="Run interactive onboarding setup")
-def setup() -> None:
-    import weather.app
-
-    try:
-        asyncio.run(weather.app.run_setup())
-    except KeyboardInterrupt:
-        typer.secho("\nAborted.", fg=typer.colors.RED, err=True)
-        raise typer.Exit(130)
-
-
-def validate_units(ctx: typer.Context) -> UnitSystem:
-    metric = ctx.params.get("metric", False)
-    imperial = ctx.params.get("imperial", False)
-
+def resolve_units(metric: bool, imperial: bool) -> UnitSystem | None:
     if metric and imperial:
         raise typer.BadParameter(
             "Cannot use both --metric and --imperial flags together."
@@ -76,16 +30,7 @@ def validate_units(ctx: typer.Context) -> UnitSystem:
     if imperial:
         return UnitSystem.IMPERIAL
 
-    return Config().unit_system
-
-
-def validate_theme(ctx: typer.Context) -> Theme:
-    theme = ctx.params.get("theme", None)
-
-    if theme:
-        return theme
-
-    return Config().theme
+    return None
 
 
 def version_callback(value: bool) -> None:
@@ -142,8 +87,7 @@ def main(
     if ctx.invoked_subcommand:
         return
 
-    unit_system = validate_units(ctx)
-    theme = validate_theme(ctx)
+    unit_system = resolve_units(metric, imperial)
 
     import weather.app
 

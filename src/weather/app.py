@@ -21,11 +21,14 @@ config = Config()
 
 async def run(
     query: str | None,
-    unit_system: UnitSystem,
-    theme: Theme,
+    unit_system: UnitSystem | None,
+    theme: Theme | None,
     days: int,
     json_output: bool,
 ) -> None:
+    unit_system = unit_system or config.unit_system
+    theme = theme or config.theme
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         if query:
             geocoder = GeocodingService(client, cache)
