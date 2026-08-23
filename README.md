@@ -10,7 +10,7 @@
 
 A fast, beautiful terminal weather client with multi-provider fallbacks, AQI metrics, and smart caching.
 
-![weather demo](assets/demo.gif)
+![weather demo](https://raw.githubusercontent.com/harshitpawar64/weather/main/assets/demo.gif)
 
 ---
 
@@ -30,7 +30,7 @@ pipx install weathr
 
 On your first launch (or at any time by running `weather setup`), `weather` launches an interactive onboarding flow. It detects your location using IP geolocation, asks to confirm your preferred city, and lets you pick your default unit system.
 
-![onboarding demo](assets/onboarding.gif)
+![onboarding demo](https://raw.githubusercontent.com/harshitpawar64/weather/main/assets/onboarding.gif)
 
 Your preferences are saved locally (`config.toml`). After setup, simply running `weather` displays your local forecast instantly.
 
