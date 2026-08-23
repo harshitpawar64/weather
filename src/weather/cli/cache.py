@@ -25,5 +25,9 @@ def prune() -> None:
 
 @app.command()
 def clear() -> None:
-    Cache().clear()
-    typer.secho("✓ Cache cleared successfully.", fg=typer.colors.GREEN)
+    try:
+        Cache().clear()
+        typer.secho("✓ Cache cleared successfully.", fg=typer.colors.GREEN)
+    except OSError as e:
+        typer.secho(f"✗ Failed to clear cache: {e}", fg=typer.colors.RED, err=True)
+        raise typer.Exit(1)

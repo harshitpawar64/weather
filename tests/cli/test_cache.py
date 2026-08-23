@@ -27,10 +27,18 @@ def test_prune_with_entries(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) 
     assert "Pruned 3 expired cache entries" in result.stdout
 
 
-def test_clear(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_clear_success(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_clear = MagicMock()
     monkeypatch.setattr(Cache, "clear", mock_clear)
     result = runner.invoke(app, ["cache", "clear"])
     assert result.exit_code == 0
     assert "Cache cleared successfully" in result.stdout
     mock_clear.assert_called_once()
+
+
+def test_clear_error(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
+    mock_clear = MagicMock(side_effect=PermissionError("Permission denied"))
+    monkeypatch.setattr(Cache, "clear", mock_clear)
+    result = runner.invoke(app, ["cache", "clear"])
+    assert result.exit_code == 1
+    assert "Failed to clear cache: Permission denied" in result.stderr
