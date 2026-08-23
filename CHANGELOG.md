@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.1](https://github.com/harshitpawar64/weather/compare/v1.0.0...v1.0.1) (2026-08-23)
+
+
+### Bug Fixes
+
+* handle empty AQI data from OpenWeather ([44c61cc](https://github.com/harshitpawar64/weather/commit/44c61ccea740b971758744cdb434cabba773b16a))
+* handle OSError on cache clear ([1e32639](https://github.com/harshitpawar64/weather/commit/1e32639b61f642b4089227b55e626fae823fb3fb))
+
+
+### Refactor
+
+* modularize cli and test suite, defer unit/theme fallback to app ([e894dc7](https://github.com/harshitpawar64/weather/commit/e894dc721b28d10da79e033a7c6029734b56b909))
+
+
+### Documentation
+
+* update demo assets in README to use absolute URLs ([c401312](https://github.com/harshitpawar64/weather/commit/c40131294c5552859794b592cf924bc0cde5ee21))
+
 ## [1.0.0](https://github.com/harshitpawar64/weather/compare/v0.1.0...v1.0.0) (2026-08-21)
 
 
