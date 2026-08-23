@@ -12,7 +12,7 @@ from weather.models import AirQuality, WeatherData
 from weather.services.aqi import AQIService
 
 
-async def test_aqi_service_cache_hit(
+async def test_cache_hit(
     cache: Cache,
     make_aqi: Callable[..., AirQuality],
     make_weather: Callable[..., WeatherData],
@@ -32,7 +32,7 @@ async def test_aqi_service_cache_hit(
     mock_provider.fetch_aqi.assert_not_called()
 
 
-async def test_aqi_service_primary_provider_success(
+async def test_primary_provider_success(
     cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
@@ -53,7 +53,7 @@ async def test_aqi_service_primary_provider_success(
     mock_secondary.fetch_aqi.assert_not_called()
 
 
-async def test_aqi_service_fallback_to_secondary_provider(
+async def test_fallback_to_secondary_provider(
     cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
@@ -76,7 +76,7 @@ async def test_aqi_service_fallback_to_secondary_provider(
     mock_secondary.fetch_aqi.assert_awaited_once_with(c.LOCATION)
 
 
-async def test_aqi_service_skips_unconfigured_provider(
+async def test_skips_unconfigured_provider(
     cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:
     expected_aqi = make_aqi(valid_until=time.time() + 3600)
@@ -98,7 +98,7 @@ async def test_aqi_service_skips_unconfigured_provider(
     mock_secondary.fetch_aqi.assert_awaited_once_with(c.LOCATION)
 
 
-async def test_aqi_service_fallback_to_stale_cache(
+async def test_fallback_to_stale_cache(
     cache: Cache,
     make_aqi: Callable[..., AirQuality],
     make_weather: Callable[..., WeatherData],
@@ -120,7 +120,7 @@ async def test_aqi_service_fallback_to_stale_cache(
     assert result == stale_aqi
 
 
-async def test_aqi_service_all_providers_fail_no_cache(
+async def test_all_providers_fail_no_cache(
     cache: Cache, mock_client: MagicMock
 ) -> None:
     failing_provider = AsyncMock()

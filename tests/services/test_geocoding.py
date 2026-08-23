@@ -9,9 +9,7 @@ from weather.exceptions import LocationNotFoundError, ServiceError
 from weather.services.geocoding import GeocodingService
 
 
-async def test_geocoding_service_cache_hit(
-    cache: Cache, mock_client: MagicMock
-) -> None:
+async def test_cache_hit(cache: Cache, mock_client: MagicMock) -> None:
     cache.save(location=c.LOCATION, weather=c.WEATHER_DATA, query=c.QUERY)
 
     mock_provider = AsyncMock()
@@ -25,9 +23,7 @@ async def test_geocoding_service_cache_hit(
     mock_provider.geocode.assert_not_called()
 
 
-async def test_geocoding_service_primary_provider_success(
-    cache: Cache, mock_client: MagicMock
-) -> None:
+async def test_primary_provider_success(cache: Cache, mock_client: MagicMock) -> None:
     mock_primary = AsyncMock()
     mock_primary.is_configured = True
     mock_primary.geocode.return_value = c.LOCATION
@@ -44,7 +40,7 @@ async def test_geocoding_service_primary_provider_success(
     mock_secondary.geocode.assert_not_called()
 
 
-async def test_geocoding_service_fallback_to_secondary_provider(
+async def test_fallback_to_secondary_provider(
     cache: Cache, mock_client: MagicMock
 ) -> None:
     mock_primary = AsyncMock()
@@ -65,7 +61,7 @@ async def test_geocoding_service_fallback_to_secondary_provider(
     mock_secondary.geocode.assert_awaited_once_with(c.QUERY)
 
 
-async def test_geocoding_service_skips_unconfigured_provider(
+async def test_skips_unconfigured_provider(
     cache: Cache, mock_client: MagicMock
 ) -> None:
     mock_primary = AsyncMock()
@@ -85,9 +81,7 @@ async def test_geocoding_service_skips_unconfigured_provider(
     mock_secondary.geocode.assert_awaited_once_with(c.QUERY)
 
 
-async def test_geocoding_service_all_providers_fail(
-    cache: Cache, mock_client: MagicMock
-) -> None:
+async def test_all_providers_fail(cache: Cache, mock_client: MagicMock) -> None:
     mock_primary = AsyncMock()
     mock_primary.is_configured = True
     mock_primary.geocode.side_effect = httpx.ConnectError("Network error")

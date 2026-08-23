@@ -3,13 +3,13 @@ import pytest
 from weather.ui.conditions import weather_condition
 
 
-def test_weather_condition_none() -> None:
+def test_none() -> None:
     cond = weather_condition(None)
     assert cond.label == "Unknown"
     assert cond.icon != ""
 
 
-def test_weather_condition_unknown_code() -> None:
+def test_unknown_code() -> None:
     cond = weather_condition(99999)
     assert cond.label == "Unknown"
     assert cond.icon != ""
@@ -48,7 +48,7 @@ def test_weather_condition_unknown_code() -> None:
         (99, "Severe thunderstorm with hail"),
     ],
 )
-def test_weather_condition_day_codes(wmo_code: int, expected_label: str) -> None:
+def test_day_codes(wmo_code: int, expected_label: str) -> None:
     cond = weather_condition(wmo_code, is_day=True)
     assert cond.label == expected_label
     assert cond.icon != ""
@@ -70,7 +70,7 @@ def test_weather_condition_day_codes(wmo_code: int, expected_label: str) -> None
         (99, "Severe thunderstorm with hail"),
     ],
 )
-def test_weather_condition_night_overrides(wmo_code: int, expected_label: str) -> None:
+def test_night_overrides(wmo_code: int, expected_label: str) -> None:
     cond = weather_condition(wmo_code, is_day=False)
     assert cond.label == expected_label
     assert cond.icon != ""

@@ -11,21 +11,19 @@ from weather.exceptions import ServiceError
 from weather.models import Theme, UnitSystem
 
 
-def test_cli_version(runner: CliRunner) -> None:
+def test_version(runner: CliRunner) -> None:
     result = runner.invoke(app, ["--version"])
     assert result.exit_code == 0
     assert "weather" in result.stdout
 
 
-def test_cli_conflicting_units(runner: CliRunner) -> None:
+def test_conflicting_units(runner: CliRunner) -> None:
     result = runner.invoke(app, ["--metric", "--imperial"])
     assert result.exit_code == 2
     assert "Cannot use both" in result.stderr
 
 
-def test_cli_main_success_metric(
-    runner: CliRunner, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_success_metric(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_run = AsyncMock()
     monkeypatch.setattr("weather.app.run", mock_run)
     result = runner.invoke(app, ["-l", c.QUERY, "-d", "3", "--metric", "--json", "-v"])
@@ -33,7 +31,7 @@ def test_cli_main_success_metric(
     mock_run.assert_awaited_once_with(c.QUERY, UnitSystem.METRIC, None, 3, True)
 
 
-def test_cli_main_success_imperial_and_theme(
+def test_success_imperial_and_theme(
     runner: CliRunner, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     mock_run = AsyncMock()
@@ -45,9 +43,7 @@ def test_cli_main_success_imperial_and_theme(
     )
 
 
-def test_cli_main_weather_error(
-    runner: CliRunner, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_weather_error(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_run = AsyncMock(side_effect=ServiceError("All providers failed."))
     monkeypatch.setattr("weather.app.run", mock_run)
     result = runner.invoke(app)
@@ -55,9 +51,7 @@ def test_cli_main_weather_error(
     assert "All providers failed." in result.stderr
 
 
-def test_cli_main_keyboard_interrupt(
-    runner: CliRunner, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_keyboard_interrupt(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_run = AsyncMock(side_effect=KeyboardInterrupt)
     monkeypatch.setattr("weather.app.run", mock_run)
     result = runner.invoke(app, ["-l", c.QUERY])

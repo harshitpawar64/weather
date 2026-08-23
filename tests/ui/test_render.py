@@ -7,7 +7,7 @@ from weather.models import Theme, UnitSystem, WeatherData, WeatherResponse
 from weather.ui.render import render_weather
 
 
-def test_render_weather_single_day(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_single_day(monkeypatch: pytest.MonkeyPatch) -> None:
     response = WeatherResponse(
         location=c.LOCATION, weather=c.WEATHER_DATA, aqi=c.AIR_QUALITY
     )
@@ -18,7 +18,7 @@ def test_render_weather_single_day(monkeypatch: pytest.MonkeyPatch) -> None:
     assert mock_print.call_count == 1
 
 
-def test_render_weather_multi_day(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_multi_day(monkeypatch: pytest.MonkeyPatch) -> None:
     daily = [c.DAILY_FORECAST, c.DAILY_FORECAST]
     weather_obj = WeatherData(
         current=c.CURRENT_WEATHER,

@@ -9,7 +9,7 @@ from weather.models import Theme, UnitSystem
 from weather.services import AQIService, GeocodingService, WeatherService
 
 
-async def test_app_run_with_query_json_output(
+async def test_run_with_query_json_output(
     capsys: pytest.CaptureFixture[str], monkeypatch: pytest.MonkeyPatch
 ) -> None:
     mock_geocode = AsyncMock(return_value=c.LOCATION)
@@ -33,9 +33,7 @@ async def test_app_run_with_query_json_output(
     assert '"us_aqi":42.0' in captured.out
 
 
-async def test_app_run_with_saved_config_renders(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+async def test_run_with_saved_config_renders(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_weather = AsyncMock(return_value=c.WEATHER_DATA)
     mock_aqi = AsyncMock(return_value=c.AIR_QUALITY)
     mock_render = MagicMock()
@@ -56,7 +54,7 @@ async def test_app_run_with_saved_config_renders(
     mock_render.assert_called_once()
 
 
-async def test_app_run_triggers_onboarding_when_no_config(
+async def test_run_triggers_onboarding_when_no_config(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     mock_onboarding = AsyncMock(return_value=(c.LOCATION, UnitSystem.METRIC))
@@ -83,7 +81,7 @@ async def test_app_run_triggers_onboarding_when_no_config(
     mock_save.assert_called_once_with(c.LOCATION, UnitSystem.METRIC)
 
 
-async def test_app_run_aqi_exception_handled_as_none(
+async def test_run_aqi_exception_handled_as_none(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     mock_weather = AsyncMock(return_value=c.WEATHER_DATA)
@@ -107,7 +105,7 @@ async def test_app_run_aqi_exception_handled_as_none(
     assert response.aqi is None
 
 
-async def test_app_run_weather_exception_propagates(
+async def test_run_weather_exception_propagates(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     mock_weather = AsyncMock(side_effect=ServiceError("All weather providers failed."))
@@ -127,7 +125,7 @@ async def test_app_run_weather_exception_propagates(
         )
 
 
-async def test_app_run_setup(monkeypatch: pytest.MonkeyPatch) -> None:
+async def test_run_setup(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_onboarding = AsyncMock(return_value=(c.LOCATION, UnitSystem.METRIC))
     mock_save = MagicMock()
 

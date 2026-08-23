@@ -8,9 +8,7 @@ from weather.models import UnitSystem
 from weather.onboarding import onboarding
 
 
-async def test_onboarding_auto_location_accepted(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+async def test_auto_location_accepted(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_geolocator = AsyncMock()
     mock_geolocator.geolocate.return_value = c.LOCATION
 
@@ -27,7 +25,7 @@ async def test_onboarding_auto_location_accepted(
     mock_geocoder.geocode.assert_not_called()
 
 
-async def test_onboarding_auto_location_declined_manual_success(
+async def test_auto_location_declined_manual_success(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     mock_geolocator = AsyncMock()
@@ -48,9 +46,7 @@ async def test_onboarding_auto_location_declined_manual_success(
     mock_geocoder.geocode.assert_awaited_once_with(c.QUERY)
 
 
-async def test_onboarding_geolocator_error_manual_retry(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+async def test_geolocator_error_manual_retry(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_geolocator = AsyncMock()
     mock_geolocator.geolocate.side_effect = ServiceError(
         "All geolocation providers failed."

@@ -8,13 +8,13 @@ from weather.config import Config
 from weather.models import Theme, UnitSystem
 
 
-def test_config_default_when_file_missing(config: Config) -> None:
+def test_default_when_file_missing(config: Config) -> None:
     assert config.location is None
     assert config.unit_system == UnitSystem.METRIC
     assert config.theme == Theme.DEFAULT
 
 
-def test_config_save_and_read(tmp_path: Path) -> None:
+def test_save_and_read(tmp_path: Path) -> None:
     cfg1 = Config(config_dir=tmp_path)
     cfg1.save(location=c.LOCATION, unit_system=UnitSystem.IMPERIAL, theme=Theme.DEFAULT)
 
@@ -24,7 +24,7 @@ def test_config_save_and_read(tmp_path: Path) -> None:
     assert cfg2.theme == Theme.DEFAULT
 
 
-def test_config_save_partial_update(config: Config) -> None:
+def test_save_partial_update(config: Config) -> None:
     config.save(location=c.LOCATION)
     assert config.location == c.LOCATION
     assert config.unit_system == UnitSystem.METRIC
@@ -34,7 +34,7 @@ def test_config_save_partial_update(config: Config) -> None:
     assert config.unit_system == UnitSystem.IMPERIAL
 
 
-def test_config_read_corrupted_file(tmp_path: Path) -> None:
+def test_read_corrupted_file(tmp_path: Path) -> None:
     config_file = tmp_path / "config.toml"
     config_file.write_bytes(b"INVALID_TOML_[[{")
 
@@ -44,7 +44,7 @@ def test_config_read_corrupted_file(tmp_path: Path) -> None:
     assert cfg.theme == Theme.DEFAULT
 
 
-def test_config_clear(config: Config) -> None:
+def test_clear(config: Config) -> None:
     config.save(location=c.LOCATION)
     assert config.file.exists()
 
@@ -52,7 +52,7 @@ def test_config_clear(config: Config) -> None:
     assert not config.file.exists()
 
 
-def test_config_write_error(config: Config, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_write_error(config: Config, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         Path, "write_bytes", MagicMock(side_effect=OSError("Disk full"))
     )

@@ -6,7 +6,7 @@ from typer.testing import CliRunner
 from weather.cli import app
 
 
-def test_cli_setup(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
+def test_setup(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_setup = AsyncMock()
     monkeypatch.setattr("weather.app.run_setup", mock_setup)
     result = runner.invoke(app, ["setup"])
@@ -14,9 +14,7 @@ def test_cli_setup(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_setup.assert_awaited_once()
 
 
-def test_cli_setup_keyboard_interrupt(
-    runner: CliRunner, monkeypatch: pytest.MonkeyPatch
-) -> None:
+def test_keyboard_interrupt(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
     mock_setup = AsyncMock(side_effect=KeyboardInterrupt)
     monkeypatch.setattr("weather.app.run_setup", mock_setup)
     result = runner.invoke(app, ["setup"])

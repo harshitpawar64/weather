@@ -12,7 +12,7 @@ from weather.models import UnitSystem, WeatherData
 from weather.services.weather import WeatherService
 
 
-async def test_weather_service_cache_hit(
+async def test_cache_hit(
     cache: Cache, make_weather: Callable[..., WeatherData], mock_client: MagicMock
 ) -> None:
     cached_weather = make_weather(valid_until=time.time() + 3600)
@@ -28,7 +28,7 @@ async def test_weather_service_cache_hit(
     mock_provider.fetch_weather.assert_not_called()
 
 
-async def test_weather_service_provider_success(
+async def test_provider_success(
     cache: Cache, make_weather: Callable[..., WeatherData], mock_client: MagicMock
 ) -> None:
     expected_weather = make_weather(valid_until=time.time() + 3600)
@@ -46,7 +46,7 @@ async def test_weather_service_provider_success(
     mock_provider.fetch_weather.assert_awaited_once_with(c.LOCATION, UnitSystem.METRIC)
 
 
-async def test_weather_service_fallback_to_stale_cache(
+async def test_fallback_to_stale_cache(
     cache: Cache, make_weather: Callable[..., WeatherData], mock_client: MagicMock
 ) -> None:
     stale_weather = make_weather(valid_until=time.time() - 3600)
@@ -64,7 +64,7 @@ async def test_weather_service_fallback_to_stale_cache(
     assert result == stale_weather
 
 
-async def test_weather_service_all_providers_fail_no_cache(
+async def test_all_providers_fail_no_cache(
     cache: Cache, mock_client: MagicMock
 ) -> None:
     failing_provider = AsyncMock()
@@ -82,7 +82,7 @@ async def test_weather_service_all_providers_fail_no_cache(
         await service.get_weather(c.LOCATION, UnitSystem.METRIC)
 
 
-async def test_weather_service_skips_unconfigured_provider(
+async def test_skips_unconfigured_provider(
     cache: Cache, mock_client: MagicMock
 ) -> None:
     unconfigured_provider = AsyncMock()

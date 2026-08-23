@@ -10,7 +10,7 @@ from weather.cache import Cache, CacheEntry
 from weather.models import AirQuality, UnitSystem, UnixTimestamp, WeatherData
 
 
-def test_cache_location_indexing(
+def test_location_indexing(
     cache: Cache, make_weather: Callable[..., WeatherData]
 ) -> None:
     weather_data = make_weather(valid_until=time.time() + 3600)
@@ -21,7 +21,7 @@ def test_cache_location_indexing(
     assert cache.get_location("nonexistent") is None
 
 
-def test_cache_weather_hit_and_expiry(
+def test_weather_hit_and_expiry(
     cache: Cache, make_weather: Callable[..., WeatherData]
 ) -> None:
     fresh_weather = make_weather(valid_until=time.time() + 3600)
@@ -39,7 +39,7 @@ def test_cache_weather_hit_and_expiry(
     )
 
 
-def test_cache_unit_system_filtering(
+def test_unit_system_filtering(
     cache: Cache, make_weather: Callable[..., WeatherData]
 ) -> None:
     metric_weather = make_weather(
@@ -51,7 +51,7 @@ def test_cache_unit_system_filtering(
     assert cache.get_weather(c.LOCATION, UnitSystem.IMPERIAL) is None
 
 
-def test_cache_aqi_hit_and_expiry(
+def test_aqi_hit_and_expiry(
     cache: Cache,
     make_weather: Callable[..., WeatherData],
     make_aqi: Callable[..., AirQuality],
@@ -69,7 +69,7 @@ def test_cache_aqi_hit_and_expiry(
     assert cache.get_aqi(c.LOCATION, ignore_expiry=True) == expired_aqi
 
 
-def test_cache_prune_entries(
+def test_prune_entries(
     cache: Cache,
     make_weather: Callable[..., WeatherData],
     make_aqi: Callable[..., AirQuality],
@@ -89,7 +89,7 @@ def test_cache_prune_entries(
     assert cache.prune() == 0
 
 
-def test_cache_read_corrupted_file(tmp_path: Path) -> None:
+def test_read_corrupted_file(tmp_path: Path) -> None:
     cache_file = tmp_path / "cache.bin"
     cache_file.write_bytes(b"\x80\xff\x00\x01INVALID_MSGPACK")
 
@@ -97,7 +97,7 @@ def test_cache_read_corrupted_file(tmp_path: Path) -> None:
     assert cache.get_weather(c.LOCATION, UnitSystem.METRIC) is None
 
 
-def test_cache_clear(cache: Cache, make_weather: Callable[..., WeatherData]) -> None:
+def test_clear(cache: Cache, make_weather: Callable[..., WeatherData]) -> None:
     weather_data = make_weather(valid_until=time.time() + 3600)
     cache.save(location=c.LOCATION, weather=weather_data)
     assert cache.file.exists()
@@ -106,7 +106,7 @@ def test_cache_clear(cache: Cache, make_weather: Callable[..., WeatherData]) -> 
     assert not cache.file.exists()
 
 
-def test_cache_write_error(
+def test_write_error(
     cache: Cache,
     make_weather: Callable[..., WeatherData],
     monkeypatch: pytest.MonkeyPatch,
