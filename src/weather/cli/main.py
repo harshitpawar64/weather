@@ -76,6 +76,7 @@ def main(
         bool | None,
         typer.Option(
             "--version",
+            "-V",
             callback=version_callback,
             is_eager=True,
             help="Show version and exit.",

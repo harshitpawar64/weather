@@ -78,7 +78,7 @@ weather -l "Berlin" -v
 | `--json`     |           |     `False`    | Output result in JSON format.                   |
 | `--theme`    |    `-t`   |    `default`   | Theme to use for rendering output.              |
 | `--verbose`  |    `-v`   |     `False`    | Enable verbose debug logging.                   |
-| `--version`  |           |                | Show version and exit.                          |
+| `--version`  |    `-V`   |                | Show version and exit.                          |
 
 ### Default File Paths
 
