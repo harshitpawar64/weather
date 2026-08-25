@@ -44,7 +44,10 @@ def version_callback(value: bool) -> None:
 def main(
     ctx: typer.Context,
     location: Annotated[
-        str | None, typer.Option("--location", "-l", help="Location")
+        str | None,
+        typer.Option(
+            "--location", "-l", help="City, landmark, address or postal codes."
+        ),
     ] = None,
     theme: Annotated[
         Theme | None,

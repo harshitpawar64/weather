@@ -2,7 +2,7 @@ import asyncio
 
 import typer
 
-app = typer.Typer(name="setup", help="Run interactive onboarding setup")
+app = typer.Typer(name="setup")
 
 
 @app.callback(invoke_without_command=True)
