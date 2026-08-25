@@ -9,6 +9,7 @@ from weather.ui.presentation import (
     format_precipitation,
     format_temperature,
     format_updated,
+    uvi_category,
     wind_direction,
 )
 
@@ -67,5 +68,8 @@ def _render_aqi(aqi: AirQuality) -> Table:
     table.add_row("AQI", aqi_category(aqi.us_aqi))
     table.add_row("PM2.5", f"{aqi.pm_2_5} µg/m³")
     table.add_row("PM10", f"{aqi.pm_10} µg/m³")
+
+    if aqi.uv_index:
+        table.add_row("UVI", uvi_category(aqi.uv_index))
 
     return table

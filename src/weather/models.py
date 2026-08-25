@@ -68,6 +68,7 @@ class AirQuality(msgspec.Struct, frozen=True):
     us_aqi: float
     pm_2_5: float
     pm_10: float
+    uv_index: float | None
     valid_until: UnixTimestamp
 
 

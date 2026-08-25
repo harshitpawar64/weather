@@ -41,6 +41,19 @@ def aqi_category(aqi: float) -> str:
     return f"[bright_white on dark_red]{aqi} [Hazardous][/]"
 
 
+def uvi_category(uvi: float) -> str:
+    if uvi <= 2:
+        return f"[green]{uvi} [Low][/]"
+    if uvi <= 5:
+        return f"[yellow]{uvi} [Moderate][/]"
+    if uvi <= 7:
+        return f"[dark_orange]{uvi} [High][/]"
+    if uvi <= 10:
+        return f"[red]{uvi} [Very high][/]"
+
+    return f"[magenta]{uvi} [Extreme][/]"
+
+
 def wind_direction(degrees: int) -> str:
     directions = ("↑", "↗", "→", "↘", "↓", "↙", "←", "↖")
     arrow = directions[round(degrees / 45) % len(directions)]

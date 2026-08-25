@@ -13,6 +13,7 @@ class OpenMeteoCurrentResponse(msgspec.Struct, frozen=True):
     us_aqi: int
     pm10: float
     pm2_5: float
+    uv_index: float
 
 
 class OpenMeteoResponse(msgspec.Struct, frozen=True):
@@ -28,7 +29,7 @@ class OpenMeteo(AQIProvider):
         params: dict[str, Any] = {
             "latitude": location.latitude,
             "longitude": location.longitude,
-            "current": ["us_aqi", "pm2_5", "pm10"],
+            "current": ["us_aqi", "pm2_5", "pm10", "uv_index"],
             "timezone": "auto",
         }
 
@@ -51,5 +52,6 @@ class OpenMeteo(AQIProvider):
             us_aqi=current.us_aqi,
             pm_2_5=current.pm2_5,
             pm_10=current.pm10,
+            uv_index=current.uv_index,
             valid_until=valid_until,
         )

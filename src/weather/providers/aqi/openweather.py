@@ -52,5 +52,6 @@ class OpenWeather(AQIProvider):
             us_aqi=us_aqi,
             pm_2_5=data.components.pm2_5,
             pm_10=data.components.pm10,
+            uv_index=None,
             valid_until=UnixTimestamp(data.dt + 3600),
         )

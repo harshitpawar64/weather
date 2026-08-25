@@ -21,7 +21,7 @@ async def test_openmeteo_aqi_fetch(
     mock_http_client: Callable[..., httpx.AsyncClient],
 ) -> None:
     current_payload = OpenMeteoCurrentResponse(
-        time=c.TIME, interval=3600, us_aqi=42, pm10=18.5, pm2_5=9.2
+        time=c.TIME, interval=3600, us_aqi=42, pm10=18.5, pm2_5=9.2, uv_index=4.20
     )
     payload = OpenMeteoResponse(utc_offset_seconds=0, current=current_payload)
 

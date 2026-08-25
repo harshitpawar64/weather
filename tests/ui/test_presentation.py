@@ -12,6 +12,7 @@ from weather.ui.presentation import (
     format_temperature,
     format_updated,
     format_wind_speed,
+    uvi_category,
     wind_direction,
 )
 
@@ -63,6 +64,26 @@ def test_format_temperature_none() -> None:
 )
 def test_aqi_category(aqi: float, expected_label: str) -> None:
     result = aqi_category(aqi)
+    assert expected_label in result
+
+
+@pytest.mark.parametrize(
+    ("uvi", "expected_label"),
+    [
+        (1.0, "[Low]"),
+        (2.0, "[Low]"),
+        (3.0, "[Moderate]"),
+        (5.0, "[Moderate]"),
+        (6.0, "[High]"),
+        (7.0, "[High]"),
+        (8.0, "[Very high]"),
+        (10.0, "[Very high]"),
+        (11.0, "[Extreme]"),
+        (15.0, "[Extreme]"),
+    ],
+)
+def test_uvi_category(uvi: float, expected_label: str) -> None:
+    result = uvi_category(uvi)
     assert expected_label in result
 
 
