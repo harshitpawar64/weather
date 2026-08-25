@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.1.0](https://github.com/harshitpawar64/weather/compare/v1.0.1...v1.1.0) (2026-08-25)
+
+
+### Features
+
+* support -V short flag for version in CLI ([457371e](https://github.com/harshitpawar64/weather/commit/457371ec09afb26c0e79ee23339ac688126e4f41))
+* support optional UV index in AQI providers and default theme ([92af43c](https://github.com/harshitpawar64/weather/commit/92af43c43be668a88af728144798e7d5f436e3ff))
+
+
+### Documentation
+
+* update location option description and remove duplicate setup command help message ([421e6c0](https://github.com/harshitpawar64/weather/commit/421e6c0681f6db85f1871627a779d16172fb4d61))
+
 ## [1.0.1](https://github.com/harshitpawar64/weather/compare/v1.0.0...v1.0.1) (2026-08-23)
 
 
