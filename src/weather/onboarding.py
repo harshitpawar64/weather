@@ -2,7 +2,6 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
 
-from weather import __version__
 from weather.exceptions import ServiceError
 from weather.models import Location, UnitSystem
 from weather.services import GeocodingService, GeolocationService
@@ -15,7 +14,7 @@ async def onboarding(
 ) -> tuple[Location, UnitSystem]:
     console.print(
         Panel.fit(
-            f"[bold cyan]Welcome to weather {__version__}![/]\n"
+            "[bold cyan]Welcome to weather ⛅[/]\n"
             "[dim]Let's set up your default location and unit preferences.[/]",
             border_style="cyan",
         )
