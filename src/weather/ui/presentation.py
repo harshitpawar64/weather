@@ -109,19 +109,24 @@ def format_updated(value: str) -> str:
 def format_day(value: str) -> str:
     try:
         return datetime.fromisoformat(value).strftime("%a %d %b")
-    except ValueError:
+    except (ValueError, TypeError):
         return value
 
 
 def format_sun(sunrise: str, sunset: str) -> str:
-    sr = datetime.fromisoformat(sunrise)
-    ss = datetime.fromisoformat(sunset)
+    try:
+        sr = datetime.fromisoformat(sunrise)
+        ss = datetime.fromisoformat(sunset)
 
-    diff = ss - sr
+        diff = ss - sr
 
-    if sr.hour == ss.hour and sr.minute == ss.minute:
-        return (
-            "[yellow]☀ Midnight sun[/]" if diff.days == 1 else "[cyan]⏾ Polar night[/]"
-        )
+        if sr.hour == ss.hour and sr.minute == ss.minute:
+            return (
+                "[yellow]☀ Midnight sun[/]"
+                if diff.days == 1
+                else "[cyan]⏾ Polar night[/]"
+            )
 
-    return f"{sr.strftime('%H:%M')} - {ss.strftime('%H:%M')}"
+        return f"{sr.strftime('%H:%M')} - {ss.strftime('%H:%M')}"
+    except (ValueError, TypeError):
+        return "[dim]-[/]"

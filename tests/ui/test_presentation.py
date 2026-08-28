@@ -162,3 +162,7 @@ def test_format_sun_midnight_sun() -> None:
         format_sun("1970-01-01T00:00", "1970-01-02T00:00")
         == "[yellow]☀ Midnight sun[/]"
     )
+
+
+def test_format_sun_invalid() -> None:
+    assert format_sun("invalid_sunrise", "invalid_sunset") == "[dim]-[/]"
