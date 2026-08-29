@@ -102,10 +102,10 @@ class OpenMeteo(WeatherProvider):
 
     @staticmethod
     def _parse_current(
-        current: OpenMeteoCurrentResponse, utc_dt: datetime
+        current: OpenMeteoCurrentResponse, local_dt: datetime
     ) -> CurrentWeather:
         return CurrentWeather(
-            time=utc_dt.isoformat(),
+            time=local_dt.isoformat(),
             weather_code=current.weather_code,
             temperature=current.temperature_2m,
             apparent_temperature=current.apparent_temperature,
