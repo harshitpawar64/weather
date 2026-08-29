@@ -57,3 +57,13 @@ def test_get_us_aqi_hazardous() -> None:
 
 def test_get_us_aqi_exceeding_breakpoints() -> None:
     assert get_us_aqi(600.0, 700.0) > 500
+
+
+def test_get_us_aqi_truncation() -> None:
+    assert get_us_aqi(15.48, 0.0) == get_us_aqi(15.4, 0.0)
+    assert get_us_aqi(0.0, 50.9) == get_us_aqi(0.0, 50.0)
+    assert get_us_aqi(9.05, 0.0) == 50
+
+
+def test_get_us_aqi_negative() -> None:
+    assert get_us_aqi(-5.0, -10.0) == 0

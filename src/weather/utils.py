@@ -28,6 +28,9 @@ def _calculate_us_aqi(
 
 
 def get_us_aqi(pm_2_5: float, pm_10: float) -> int:
+    pm_2_5 = max(0.0, int(pm_2_5 * 10) / 10)
+    pm_10 = max(0, int(pm_10))
+
     # (C_low, C_high, I_low, I_high)
     pm_2_5_breakpoints = [
         (0.0, 9.0, 0.0, 50.0),
