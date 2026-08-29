@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.1](https://github.com/harshitpawar64/weather/compare/v1.1.0...v1.1.1) (2026-08-29)
+
+
+### Bug Fixes
+
+* handle invalid date strings in format_sun and format_day ([92b6cd5](https://github.com/harshitpawar64/weather/commit/92b6cd558b24fb43e00c20163ae846d1e731bc38))
+* handle malformed coordinates from IPInfo ([8ec6d51](https://github.com/harshitpawar64/weather/commit/8ec6d514013c30365435f5191820410f157db52e))
+* truncate pollutant concentrations in US AQI calculation to prevent breakpoint gaps ([56bf7b1](https://github.com/harshitpawar64/weather/commit/56bf7b14550c2206585b2415d7505f915a1c42cf))
+
+
+### Refactor
+
+* rename utc_dt to local_dt in OpenMeteo weather provider ([1a168ca](https://github.com/harshitpawar64/weather/commit/1a168caf3afec5ac14fbc1d171e557fa344f25c3))
+
 ## [1.1.0](https://github.com/harshitpawar64/weather/compare/v1.0.1...v1.1.0) (2026-08-25)
 
 
