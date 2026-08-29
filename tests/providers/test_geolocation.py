@@ -1,8 +1,10 @@
 from collections.abc import Callable
 
 import httpx
+import pytest
 
 import tests.constants as c
+from weather.exceptions import ProviderError
 from weather.providers.geolocation import CountryIs, FreeIPAPI, IPInfo, IPWhoIs
 from weather.providers.geolocation.countryis import CountryIsLocation, CountryIsResponse
 from weather.providers.geolocation.freeipapi import FreeIPAPIResponse
@@ -65,6 +67,19 @@ async def test_ipinfo_geolocation(
         assert location.latitude == c.LATITUDE
         assert location.longitude == c.LONGITUDE
         assert location.display_name == c.DISPLAY_NAME
+
+
+async def test_ipinfo_invalid_coordinates(
+    mock_http_client: Callable[..., httpx.AsyncClient],
+) -> None:
+    payload = IPInfoResponse(
+        loc="invalid_loc", city=c.CITY, region=c.REGION, country=c.COUNTRY
+    )
+
+    async with mock_http_client(payload) as client:
+        provider = IPInfo(client)
+        with pytest.raises(ProviderError, match="Invalid coordinates: 'invalid_loc'"):
+            await provider.geolocate()
 
 
 async def test_ipwhois_geolocation(

@@ -2,6 +2,7 @@ from typing import override
 
 import msgspec
 
+from weather.exceptions import ProviderError
 from weather.models import Location
 from weather.providers.geolocation.base import GeolocationProvider
 
@@ -14,9 +15,12 @@ class IPInfoResponse(msgspec.Struct, frozen=True):
 
     @property
     def coordinates(self) -> tuple[float, float]:
-        latitude, longitude = self.loc.split(",")
+        try:
+            latitude, longitude = self.loc.split(",")
 
-        return float(latitude), float(longitude)
+            return float(latitude), float(longitude)
+        except ValueError as e:
+            raise ProviderError(f"Invalid coordinates: '{self.loc}'") from e
 
 
 class IPInfo(GeolocationProvider):
