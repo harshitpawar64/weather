@@ -16,6 +16,7 @@ wheels/
 # Unit test / coverage reports
 htmlcov/
 .coverage
+coverage.xml
 .pytest_cache/
 
 # Virtual environments
