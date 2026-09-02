@@ -1,6 +1,7 @@
 # weather ⛅
 
 [![CI](https://github.com/harshitpawar64/weather/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/harshitpawar64/weather/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/harshitpawar64/weather/graph/badge.svg)](https://codecov.io/github/harshitpawar64/weather)
 [![python](https://img.shields.io/badge/Python-3.12_|_3.13_|_3.14-35c555.svg?logo=python&labelColor=31373c&logoColor=skyblue)](https://www.python.org/)
 
 [![uv](https://img.shields.io/badge/uv-black.svg?logo=uv)](https://docs.astral.sh/uv/)
@@ -169,4 +170,4 @@ This project is powered by several free and open data providers:
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](https://github.com/harshitpawar64/weather/blob/main/LICENSE).
