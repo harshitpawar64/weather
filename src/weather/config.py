@@ -9,7 +9,7 @@ from weather.models import Location, Theme, UnitSystem
 logger = logging.getLogger(__name__)
 
 
-class ConfigData(msgspec.Struct):
+class ConfigData(msgspec.Struct, omit_defaults=True):
     location: Location | None = None
     unit_system: UnitSystem = UnitSystem.METRIC
     theme: Theme = Theme.DEFAULT
@@ -72,6 +72,6 @@ class Config:
         self._data = ConfigData(location=location, unit_system=unit_system, theme=theme)
         self._write()
 
-    def clear(self):
+    def reset(self) -> None:
         self.file.unlink(missing_ok=True)
         self.file.with_suffix(".tmp").unlink(missing_ok=True)

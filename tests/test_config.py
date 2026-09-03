@@ -44,11 +44,11 @@ def test_read_corrupted_file(tmp_path: Path) -> None:
     assert cfg.theme == Theme.DEFAULT
 
 
-def test_clear(config: Config) -> None:
+def test_reset(config: Config) -> None:
     config.save(location=c.LOCATION)
     assert config.file.exists()
 
-    config.clear()
+    config.reset()
     assert not config.file.exists()
 
 
