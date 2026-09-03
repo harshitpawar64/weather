@@ -1,6 +1,7 @@
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Confirm, Prompt
+from rich.table import Table
 
 from weather.exceptions import ServiceError
 from weather.models import Location, UnitSystem
@@ -25,11 +26,14 @@ async def onboarding(
     unit_system = _choose_unit_system()
 
     console.print()
-    console.print(f"[bold green]✓ Location:[/] [white]{location.display_name}[/]")
-    console.print(
-        f"[bold green]✓ Units:[/]    [white]{unit_system.capitalize()} "
-        f"({unit_system.temperature}, {unit_system.wind_speed}, {unit_system.precipitation})[/]"
-    )
+    table = Table.grid(padding=(0, 1))
+    table.add_column(style="bold green")
+    table.add_column(style="white")
+
+    table.add_row("✓ Location:", location.display_name)
+    table.add_row("✓ Units:", unit_system.label)
+
+    console.print(table)
     console.print("[bold green]✓ Setup complete![/]\n")
 
     return location, unit_system
@@ -68,14 +72,15 @@ async def _choose_location(
 def _choose_unit_system() -> UnitSystem:
     console.print()
     console.print("[dim]Select your preferred unit system:[/]")
-    console.print(
-        f"  • [cyan]metric[/]:   {UnitSystem.METRIC.temperature}, {UnitSystem.METRIC.wind_speed}, {UnitSystem.METRIC.precipitation}"
-    )
-    console.print(
-        f"  • [cyan]imperial[/]: {UnitSystem.IMPERIAL.temperature}, {UnitSystem.IMPERIAL.wind_speed}, {UnitSystem.IMPERIAL.precipitation}"
-    )
-    console.print()
 
+    table = Table.grid(padding=(0, 1))
+
+    for unit in UnitSystem:
+        table.add_row(f"  • [cyan]{unit}:[/]", unit.symbols)
+
+    console.print(table)
+
+    console.print()
     value = Prompt.ask(
         "Unit system", choices=list(UnitSystem), default=UnitSystem.METRIC
     )

@@ -12,15 +12,23 @@ class UnitSystem(StrEnum):
 
     @property
     def temperature(self) -> str:
-        return "°C" if self == UnitSystem.METRIC else "°F"
+        return "°C" if self is UnitSystem.METRIC else "°F"
 
     @property
     def wind_speed(self) -> str:
-        return "km/h" if self == UnitSystem.METRIC else "mph"
+        return "km/h" if self is UnitSystem.METRIC else "mph"
 
     @property
     def precipitation(self) -> str:
-        return "mm" if self == UnitSystem.METRIC else "in"
+        return "mm" if self is UnitSystem.METRIC else "in"
+
+    @property
+    def symbols(self) -> str:
+        return f"{self.temperature}, {self.wind_speed}, {self.precipitation}"
+
+    @property
+    def label(self) -> str:
+        return f"{self} ({self.symbols})"
 
 
 class Theme(StrEnum):

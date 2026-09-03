@@ -5,14 +5,22 @@ import tests.constants as c
 from weather.models import Location, UnitSystem
 
 
-def test_unit_system_properties() -> None:
-    assert UnitSystem.METRIC.temperature == "°C"
-    assert UnitSystem.METRIC.wind_speed == "km/h"
-    assert UnitSystem.METRIC.precipitation == "mm"
+def test_unit_system_metric() -> None:
+    unit = UnitSystem.METRIC
+    assert unit.temperature == "°C"
+    assert unit.wind_speed == "km/h"
+    assert unit.precipitation == "mm"
+    assert unit.symbols == "°C, km/h, mm"
+    assert unit.label == "metric (°C, km/h, mm)"
 
-    assert UnitSystem.IMPERIAL.temperature == "°F"
-    assert UnitSystem.IMPERIAL.wind_speed == "mph"
-    assert UnitSystem.IMPERIAL.precipitation == "in"
+
+def test_unit_system_imperial() -> None:
+    unit = UnitSystem.IMPERIAL
+    assert unit.temperature == "°F"
+    assert unit.wind_speed == "mph"
+    assert unit.precipitation == "in"
+    assert unit.symbols == "°F, mph, in"
+    assert unit.label == "imperial (°F, mph, in)"
 
 
 def test_location_valid() -> None:
