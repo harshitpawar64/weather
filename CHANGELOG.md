@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.2.0](https://github.com/harshitpawar64/weather/compare/v1.1.1...v1.2.0) (2026-09-03)
+
+
+### Features
+
+* add show, set, and reset subcommands for config management in CLI ([d1e8a51](https://github.com/harshitpawar64/weather/commit/d1e8a517f31825f88bc461063dee514c3640b952))
+* add stats subcommand for cache inspection in CLI ([50c01e1](https://github.com/harshitpawar64/weather/commit/50c01e11aa3bea73446889b650c9fceeea681e61))
+
+
+### Refactor
+
+* add UnitSystem display properties and simplify onboarding ([0ac436f](https://github.com/harshitpawar64/weather/commit/0ac436fa87a4ead767b56e85b7ce81b76134d70e))
+* omit defaults in ConfigData and rename Config.clear to reset ([a97d0ee](https://github.com/harshitpawar64/weather/commit/a97d0ee25c9d4822db87357af4f0092547aba2b9))
+
+
+### Documentation
+
+* add Codecov badge to README ([9004d36](https://github.com/harshitpawar64/weather/commit/9004d3631825c74a043b049b5e6eea91f70de01e))
+
 ## [1.1.1](https://github.com/harshitpawar64/weather/compare/v1.1.0...v1.1.1) (2026-08-29)
 
 
