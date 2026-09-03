@@ -11,7 +11,7 @@ class Provider(ABC):
     API_URL: ClassVar[str] = ""
     API_KEY_ENV: ClassVar[str | None] = None
 
-    def __init__(self, client: httpx.AsyncClient):
+    def __init__(self, client: httpx.AsyncClient) -> None:
         self.client = client
 
     @property

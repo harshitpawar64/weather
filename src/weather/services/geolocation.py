@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 class GeolocationService:
-    def __init__(self, client: httpx.AsyncClient):
+    def __init__(self, client: httpx.AsyncClient) -> None:
         self.providers: tuple[GeolocationProvider, ...] = (
             IPWhoIs(client),
             FreeIPAPI(client),

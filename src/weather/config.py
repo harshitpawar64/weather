@@ -16,7 +16,7 @@ class ConfigData(msgspec.Struct, omit_defaults=True):
 
 
 class Config:
-    def __init__(self, config_dir: Path | None = None):
+    def __init__(self, config_dir: Path | None = None) -> None:
         self.file = (
             config_dir or user_config_path("weather", ensure_exists=True)
         ) / "config.toml"

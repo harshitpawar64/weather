@@ -85,7 +85,7 @@ def main(
             help="Show version and exit.",
         ),
     ] = None,
-):
+) -> None:
     setup_logging(verbose)
 
     if ctx.invoked_subcommand:

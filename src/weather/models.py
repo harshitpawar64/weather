@@ -40,7 +40,7 @@ class Location(msgspec.Struct, frozen=True):
     longitude: float
     display_name: str
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if not -90 <= self.latitude <= 90:
             raise msgspec.ValidationError(f"Invalid latitude: {self.latitude}")
         if not -180 <= self.longitude <= 180:

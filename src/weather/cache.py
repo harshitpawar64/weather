@@ -23,7 +23,7 @@ class CacheData(msgspec.Struct):
 
 
 class Cache:
-    def __init__(self, cache_dir: Path | None = None):
+    def __init__(self, cache_dir: Path | None = None) -> None:
         self.file = (
             cache_dir or user_cache_path("weather", ensure_exists=True)
         ) / "cache.bin"
@@ -130,7 +130,7 @@ class Cache:
 
         return len(stale_keys)
 
-    def clear(self):
+    def clear(self) -> None:
         self.file.unlink(missing_ok=True)
         self.file.with_suffix(".tmp").unlink(missing_ok=True)
 

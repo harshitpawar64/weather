@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class WeatherService:
-    def __init__(self, client: httpx.AsyncClient, cache: Cache):
+    def __init__(self, client: httpx.AsyncClient, cache: Cache) -> None:
         self.providers: tuple[WeatherProvider, ...] = (OpenMeteo(client),)
         self.cache = cache
 

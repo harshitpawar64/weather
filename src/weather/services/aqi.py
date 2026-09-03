@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class AQIService:
-    def __init__(self, client: httpx.AsyncClient, cache: Cache):
+    def __init__(self, client: httpx.AsyncClient, cache: Cache) -> None:
         self.providers: tuple[AQIProvider, ...] = (
             OpenMeteo(client),
             OpenWeather(client),
