@@ -112,6 +112,15 @@ weather setup
 
 # Display config file path
 weather config path
+
+# View current configuration
+weather config show
+
+# Update configuration preferences
+weather config set --location "Paris" --units imperial
+
+# Reset configuration to defaults
+weather config reset
 ```
 
 Config file example (`config.toml`):
