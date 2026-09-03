@@ -16,6 +16,28 @@ class CacheEntry(msgspec.Struct, frozen=True):
     weather: WeatherData | None = None
     aqi: AirQuality | None = None
 
+    def is_expired(self, now: float | None = None) -> bool:
+        now = now or time.time()
+        return (
+            not self.weather or now > self.weather.valid_until + _STALE_MAX_AGE
+        ) and (not self.aqi or now > self.aqi.valid_until + _STALE_MAX_AGE)
+
+
+class CacheStats(msgspec.Struct, frozen=True):
+    size: int
+    queries: int
+    entries: int
+    expired: int
+
+    @property
+    def formatted_size(self) -> str:
+        s = self.size / 1024
+        for unit in ("KB", "MB"):
+            if s < 1024:
+                return f"{s:.1f} {unit}"
+            s /= 1024
+        return f"{s:.1f} GB"
+
 
 class CacheData(msgspec.Struct):
     queries: dict[str, Location] = {}
@@ -110,14 +132,27 @@ class Cache:
         if not removed:
             self._write()
 
+    def stats(self) -> CacheStats:
+        now = time.time()
+        expired = sum(entry.is_expired(now) for entry in self._data.data.values())
+
+        try:
+            size = self.file.stat().st_size
+        except OSError:
+            size = 0
+
+        return CacheStats(
+            size=size,
+            queries=len(self._data.queries),
+            entries=len(self._data.data),
+            expired=expired,
+        )
+
     def prune(self) -> int:
         now = time.time()
 
         stale_keys = [
-            key
-            for key, entry in self._data.data.items()
-            if (not entry.weather or now > entry.weather.valid_until + _STALE_MAX_AGE)
-            and (not entry.aqi or now > entry.aqi.valid_until + _STALE_MAX_AGE)
+            key for key, entry in self._data.data.items() if entry.is_expired(now)
         ]
 
         if not stale_keys:

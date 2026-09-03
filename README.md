@@ -97,6 +97,9 @@ weather -l "Berlin" -v
 # View cache file location
 weather cache path
 
+# View cache size, entries and status
+weather cache stats
+
 # Remove expired entries (>1 week old)
 weather cache prune
 

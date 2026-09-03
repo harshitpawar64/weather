@@ -1,13 +1,38 @@
 import typer
+from rich.console import Console
+from rich.table import Table
 
 from weather.cache import Cache
 
 app = typer.Typer(name="cache", help="Manage cache")
+console = Console()
 
 
 @app.command()
 def path() -> None:
     print(Cache().file.resolve())
+
+
+@app.command()
+def stats() -> None:
+    cache = Cache()
+    stats = cache.stats()
+
+    table = Table.grid(padding=(0, 2))
+    table.add_column(style="bold cyan")
+    table.add_column(style="white")
+
+    if stats.expired > 0:
+        expired_str = f"{stats.expired} [dim](run 'weather cache prune' to clean)[/]"
+    else:
+        expired_str = "0 [dim](clean)[/]"
+
+    table.add_row("Size:", stats.formatted_size)
+    table.add_row("Queries:", str(stats.queries))
+    table.add_row("Entries:", str(stats.entries))
+    table.add_row("Expired:", expired_str)
+
+    console.print(table)
 
 
 @app.command()

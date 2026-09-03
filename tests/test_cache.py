@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 
 import tests.constants as c
-from weather.cache import Cache, CacheEntry
+from weather.cache import Cache, CacheEntry, CacheStats
 from weather.models import AirQuality, UnitSystem, UnixTimestamp, WeatherData
 
 
@@ -67,6 +67,42 @@ def test_aqi_hit_and_expiry(
 
     assert cache.get_aqi(c.LOCATION, ignore_expiry=False) is None
     assert cache.get_aqi(c.LOCATION, ignore_expiry=True) == expired_aqi
+
+
+def test_cache_stats(
+    cache: Cache,
+    make_weather: Callable[..., WeatherData],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    assert cache.stats() == CacheStats(size=0, queries=0, entries=0, expired=0)
+
+    now = time.time()
+    weather = make_weather(valid_until=now + 3600)
+    cache.save(location=c.LOCATION, weather=weather, query="Paris")
+
+    stats = cache.stats()
+    assert stats.queries == 1
+    assert stats.entries == 1
+    assert stats.expired == 0
+    assert stats.size > 0
+
+    monkeypatch.setattr(time, "time", lambda: now + 700000)
+    assert cache.stats().expired == 1
+
+
+def test_cache_stats_formatted_size() -> None:
+    assert (
+        CacheStats(size=1024, queries=0, entries=0, expired=0).formatted_size
+        == "1.0 KB"
+    )
+    assert (
+        CacheStats(size=1048576, queries=0, entries=0, expired=0).formatted_size
+        == "1.0 MB"
+    )
+    assert (
+        CacheStats(size=1073741824, queries=0, entries=0, expired=0).formatted_size
+        == "1.0 GB"
+    )
 
 
 def test_prune_entries(
