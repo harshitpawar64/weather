@@ -32,6 +32,30 @@ async def test_cache_hit(
     mock_provider.fetch_aqi.assert_not_called()
 
 
+async def test_refresh_bypasses_cache(
+    cache: Cache,
+    make_aqi: Callable[..., AirQuality],
+    make_weather: Callable[..., WeatherData],
+    mock_client: MagicMock,
+) -> None:
+    cached_aqi = make_aqi(valid_until=time.time() + 3600)
+    weather_dummy = make_weather(valid_until=time.time() + 3600)
+    cache.save(location=c.LOCATION, weather=weather_dummy, aqi=cached_aqi)
+
+    fresh_aqi = make_aqi(valid_until=time.time() + 7200)
+    mock_provider = AsyncMock()
+    mock_provider.is_configured = True
+    mock_provider.fetch_aqi.return_value = fresh_aqi
+
+    service = AQIService(mock_client, cache)
+    service.providers = (mock_provider,)
+
+    result = await service.get_aqi(c.LOCATION, refresh=True)
+
+    assert result == fresh_aqi
+    mock_provider.fetch_aqi.assert_awaited_once_with(c.LOCATION)
+
+
 async def test_primary_provider_success(
     cache: Cache, make_aqi: Callable[..., AirQuality], mock_client: MagicMock
 ) -> None:

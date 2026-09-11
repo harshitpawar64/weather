@@ -17,9 +17,11 @@ class WeatherService:
         self.cache = cache
 
     async def get_weather(
-        self, location: Location, unit_system: UnitSystem
+        self, location: Location, unit_system: UnitSystem, refresh: bool = False
     ) -> WeatherData:
-        if cached_data := self.cache.get_weather(location, unit_system):
+        if not refresh and (
+            cached_data := self.cache.get_weather(location, unit_system)
+        ):
             logger.info(
                 "Weather cache hit for coordinates: (%s, %s)",
                 location.latitude,

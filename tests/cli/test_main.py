@@ -28,7 +28,7 @@ def test_success_metric(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> N
     monkeypatch.setattr("weather.app.run", mock_run)
     result = runner.invoke(app, ["-l", c.QUERY, "-d", "3", "--metric", "--json", "-v"])
     assert result.exit_code == 0
-    mock_run.assert_awaited_once_with(c.QUERY, UnitSystem.METRIC, None, 3, True)
+    mock_run.assert_awaited_once_with(c.QUERY, UnitSystem.METRIC, None, 3, True, False)
 
 
 def test_success_imperial_and_theme(
@@ -39,8 +39,16 @@ def test_success_imperial_and_theme(
     result = runner.invoke(app, ["-l", c.QUERY, "--imperial", "-t", "default"])
     assert result.exit_code == 0
     mock_run.assert_awaited_once_with(
-        c.QUERY, UnitSystem.IMPERIAL, Theme.DEFAULT, 7, False
+        c.QUERY, UnitSystem.IMPERIAL, Theme.DEFAULT, 7, False, False
     )
+
+
+def test_success_refresh(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:
+    mock_run = AsyncMock()
+    monkeypatch.setattr("weather.app.run", mock_run)
+    result = runner.invoke(app, ["-l", c.QUERY, "--refresh"])
+    assert result.exit_code == 0
+    mock_run.assert_awaited_once_with(c.QUERY, None, None, 7, False, True)
 
 
 def test_weather_error(runner: CliRunner, monkeypatch: pytest.MonkeyPatch) -> None:

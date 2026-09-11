@@ -54,6 +54,30 @@ async def test_run_with_saved_config_renders(monkeypatch: pytest.MonkeyPatch) ->
     mock_render.assert_called_once()
 
 
+async def test_run_with_refresh(monkeypatch: pytest.MonkeyPatch) -> None:
+    mock_weather = AsyncMock(return_value=c.WEATHER_DATA)
+    mock_aqi = AsyncMock(return_value=c.AIR_QUALITY)
+    mock_render = MagicMock()
+
+    monkeypatch.setattr(weather.app.Config, "location", c.LOCATION)
+    monkeypatch.setattr(WeatherService, "get_weather", mock_weather)
+    monkeypatch.setattr(AQIService, "get_aqi", mock_aqi)
+    monkeypatch.setattr("weather.app.render_weather", mock_render)
+
+    await weather.app.run(
+        query=None,
+        unit_system=UnitSystem.METRIC,
+        theme=Theme.DEFAULT,
+        days=7,
+        json_output=False,
+        refresh=True,
+    )
+
+    mock_render.assert_called_once()
+    mock_weather.assert_awaited_once_with(c.LOCATION, UnitSystem.METRIC, refresh=True)
+    mock_aqi.assert_awaited_once_with(c.LOCATION, refresh=True)
+
+
 async def test_run_triggers_onboarding_when_no_config(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:

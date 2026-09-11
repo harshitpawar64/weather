@@ -25,6 +25,7 @@ async def run(
     theme: Theme | None,
     days: int,
     json_output: bool,
+    refresh: bool = False,
 ) -> None:
     unit_system = unit_system or config.unit_system
     theme = theme or config.theme
@@ -46,8 +47,8 @@ async def run(
         aqi_service = AQIService(client, cache)
 
         weather, aqi = await asyncio.gather(
-            weather_service.get_weather(location, unit_system),
-            aqi_service.get_aqi(location),
+            weather_service.get_weather(location, unit_system, refresh=refresh),
+            aqi_service.get_aqi(location, refresh=refresh),
             return_exceptions=True,
         )
 

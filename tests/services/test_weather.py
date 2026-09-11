@@ -28,6 +28,26 @@ async def test_cache_hit(
     mock_provider.fetch_weather.assert_not_called()
 
 
+async def test_refresh_bypasses_cache(
+    cache: Cache, make_weather: Callable[..., WeatherData], mock_client: MagicMock
+) -> None:
+    cached_weather = make_weather(valid_until=time.time() + 3600)
+    cache.save(location=c.LOCATION, weather=cached_weather)
+
+    fresh_weather = make_weather(valid_until=time.time() + 7200)
+    mock_provider = AsyncMock()
+    mock_provider.is_configured = True
+    mock_provider.fetch_weather.return_value = fresh_weather
+
+    service = WeatherService(mock_client, cache)
+    service.providers = (mock_provider,)
+
+    result = await service.get_weather(c.LOCATION, UnitSystem.METRIC, refresh=True)
+
+    assert result == fresh_weather
+    mock_provider.fetch_weather.assert_awaited_once_with(c.LOCATION, UnitSystem.METRIC)
+
+
 async def test_provider_success(
     cache: Cache, make_weather: Callable[..., WeatherData], mock_client: MagicMock
 ) -> None:

@@ -56,6 +56,10 @@ weather -l London -d 10
 weather --metric     # °C, km/h, mm
 weather --imperial   # °F, mph, in
 
+# Bypass cache and fetch fresh data
+weather --refresh
+weather -l "Paris" -r
+
 # Output JSON for scripting
 weather --json
 weather -l "Reykjavik" --json | jq .weather.current.temperature
@@ -76,6 +80,7 @@ weather -l "Berlin" -v
 | `--days`     |    `-d`   |       `7`      | Total days of forecast, including today. (1-16) |
 | `--metric`   |           |                | Use metric units (°C, km/h, mm)                 |
 | `--imperial` |           |                | Use imperial units (°F, mph, in)                |
+| `--refresh`  |    `-r`   |     `False`    | Bypass cache and fetch fresh weather data.      |
 | `--json`     |           |     `False`    | Output result in JSON format.                   |
 | `--theme`    |    `-t`   |    `default`   | Theme to use for rendering output.              |
 | `--verbose`  |    `-v`   |     `False`    | Enable verbose debug logging.                   |

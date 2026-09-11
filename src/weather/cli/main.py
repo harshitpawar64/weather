@@ -69,6 +69,12 @@ def main(
     imperial: Annotated[
         bool, typer.Option("--imperial", help="Use imperial units (°F, mph, in)")
     ] = False,
+    refresh: Annotated[
+        bool,
+        typer.Option(
+            "--refresh", "-r", help="Bypass cache and fetch fresh weather data."
+        ),
+    ] = False,
     json_output: Annotated[
         bool, typer.Option("--json", help="Output result in JSON format.")
     ] = False,
@@ -96,7 +102,9 @@ def main(
     import weather.app
 
     try:
-        asyncio.run(weather.app.run(location, unit_system, theme, days, json_output))
+        asyncio.run(
+            weather.app.run(location, unit_system, theme, days, json_output, refresh)
+        )
     except WeatherError as e:
         logger.error("%s", e)
         raise typer.Exit(1)
