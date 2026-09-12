@@ -107,10 +107,20 @@ def test_wind_direction(degrees: int, expected_arrow: str) -> None:
 
 
 def test_format_precipitation() -> None:
-    assert format_precipitation(None) == "[dim]-[/]"
-    assert format_precipitation(10) == "10%"
-    assert "[cyan]45%[/]" == format_precipitation(45)
-    assert "[bold cyan]80% ☂[/]" == format_precipitation(80)
+    assert format_precipitation(None, None, UnitSystem.METRIC) == "[dim]-[/]"
+    assert format_precipitation(None, 2.5, UnitSystem.METRIC) == "2.5 mm"
+    assert format_precipitation(10, None, UnitSystem.METRIC) == "10%"
+    assert format_precipitation(10, 0.0, UnitSystem.METRIC) == "0 mm | 10%"
+    assert format_precipitation(45, None, UnitSystem.METRIC) == "45%"
+    assert format_precipitation(45, 1.2, UnitSystem.METRIC) == "1.2 mm | [cyan]45%[/]"
+    assert format_precipitation(80, None, UnitSystem.METRIC) == "80%"
+    assert (
+        format_precipitation(80, 5.0, UnitSystem.METRIC) == "5 mm | [bold cyan]80% ☂[/]"
+    )
+    assert (
+        format_precipitation(80, 0.25, UnitSystem.IMPERIAL)
+        == "0.25 in | [bold cyan]80% ☂[/]"
+    )
 
 
 def test_format_wind_speed_metric() -> None:

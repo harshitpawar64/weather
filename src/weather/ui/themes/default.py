@@ -42,7 +42,9 @@ def render_overview(response: WeatherResponse) -> Group:
     )
     current_table.add_row(
         "Precip",
-        f"{current.precipitation:g} {units.precipitation} | {format_precipitation(today.precipitation_prob_max)}",
+        format_precipitation(
+            today.precipitation_prob_max, today.precipitation_sum, units
+        ),
     )
 
     columns = [condition.icon, current_table]

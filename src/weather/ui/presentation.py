@@ -61,15 +61,23 @@ def wind_direction(degrees: int) -> str:
     return f"[bold blue]{arrow}[/]"
 
 
-def format_precipitation(prob: int | None) -> str:
-    if prob is None:
+def format_precipitation(
+    prob: int | None, amount: float | None, units: UnitSystem
+) -> str:
+    if prob is None and amount is None:
         return "[dim]-[/]"
-    if prob >= 66:
-        return f"[bold cyan]{prob}% ☂[/]"
-    if prob >= 33:
-        return f"[cyan]{prob}%[/]"
+    elif prob is None:
+        return f"{amount:g} {units.precipitation}"
+    elif amount is None:
+        return f"{prob}%"
+    elif prob >= 66:
+        prob_str = f"[bold cyan]{prob}% ☂[/]"
+    elif prob >= 33:
+        prob_str = f"[cyan]{prob}%[/]"
+    else:
+        prob_str = f"{prob}%"
 
-    return f"{prob}%"
+    return f"{amount:g} {units.precipitation} | {prob_str}"
 
 
 def format_wind_speed(speed: float | None, units: UnitSystem) -> str:

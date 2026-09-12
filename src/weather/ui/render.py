@@ -54,7 +54,10 @@ def _forecast_panel(day: DailyForecast, units: UnitSystem) -> Panel:
     details = Table.grid(expand=True, padding=(0, 1))
     details.add_column(style="dim")
     details.add_column(justify="right", style="bold white")
-    details.add_row("Precip", format_precipitation(day.precipitation_prob_max))
+    details.add_row(
+        "Precip",
+        format_precipitation(day.precipitation_prob_max, day.precipitation_sum, units),
+    )
     details.add_row("Wind", format_wind_speed(day.wind_speed_max, units))
     details.add_row("Sun", format_sun(day.sunrise, day.sunset))
 
