@@ -6,7 +6,7 @@ Set Shell bash
 Set Width 1200
 Set Height 600
 Set FontSize 20
-Set FontFamily "CaskaydiaCove Nerd Font"
+Set FontFamily "Cascadia Code"
 Set Theme "Dracula"
 Set Padding 10
 Set WindowBar "Colorful"
