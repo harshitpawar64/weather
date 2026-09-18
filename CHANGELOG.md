@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.3.0](https://github.com/harshitpawar64/weather/compare/v1.2.0...v1.3.0) (2026-09-18)
+
+
+### Features
+
+* add refresh option in CLI to bypass cache ([bbc6ab3](https://github.com/harshitpawar64/weather/commit/bbc6ab387b9e12d45243cf93d305bb4fba86eb60))
+* display precipitation amount in daily forecast panels ([51d7b8e](https://github.com/harshitpawar64/weather/commit/51d7b8e9956e953904d0474a99a0382062d1cacb))
+
+
+### Bug Fixes
+
+* disable appauthor to prevent duplicate directories on Windows ([80dd3fd](https://github.com/harshitpawar64/weather/commit/80dd3fdc2002a5b5a49670fb09b950312784f13b))
+
 ## [1.2.0](https://github.com/harshitpawar64/weather/compare/v1.1.1...v1.2.0) (2026-09-03)
 
 
