@@ -47,7 +47,7 @@ class CacheData(msgspec.Struct):
 class Cache:
     def __init__(self, cache_dir: Path | None = None) -> None:
         self.file = (
-            cache_dir or user_cache_path("weather", ensure_exists=True)
+            cache_dir or user_cache_path("weather", appauthor=False, ensure_exists=True)
         ) / "cache.bin"
 
         self._encoder = msgspec.msgpack.Encoder()
