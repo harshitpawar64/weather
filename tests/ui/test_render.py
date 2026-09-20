@@ -7,18 +7,20 @@ from weather.models import Theme, UnitSystem, WeatherData, WeatherResponse
 from weather.ui.render import render_weather
 
 
-def test_single_day(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.mark.parametrize("theme", list(Theme))
+def test_single_day(theme: Theme, monkeypatch: pytest.MonkeyPatch) -> None:
     response = WeatherResponse(
         location=c.LOCATION, weather=c.WEATHER_DATA, aqi=c.AIR_QUALITY
     )
     mock_print = MagicMock()
     monkeypatch.setattr("weather.ui.render.console.print", mock_print)
 
-    render_weather(response, theme=Theme.DEFAULT, days=1)
+    render_weather(response, theme=theme, days=1)
     assert mock_print.call_count == 1
 
 
-def test_multi_day(monkeypatch: pytest.MonkeyPatch) -> None:
+@pytest.mark.parametrize("theme", list(Theme))
+def test_multi_day(theme: Theme, monkeypatch: pytest.MonkeyPatch) -> None:
     daily = [c.DAILY_FORECAST, c.DAILY_FORECAST]
     weather_obj = WeatherData(
         current=c.CURRENT_WEATHER,
@@ -32,5 +34,5 @@ def test_multi_day(monkeypatch: pytest.MonkeyPatch) -> None:
     mock_print = MagicMock()
     monkeypatch.setattr("weather.ui.render.console.print", mock_print)
 
-    render_weather(response, theme=Theme.DEFAULT, days=2)
+    render_weather(response, theme=theme, days=2)
     assert mock_print.call_count == 3
