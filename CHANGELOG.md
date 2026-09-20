@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/harshitpawar64/weather/compare/v1.3.0...v1.3.1) (2026-09-20)
+
+
+### Refactor
+
+* extend theme interface to support forecast rendering ([7cad73c](https://github.com/harshitpawar64/weather/commit/7cad73ca309f34755b409f0a65a710694c2a6ebc))
+
 ## [1.3.0](https://github.com/harshitpawar64/weather/compare/v1.2.0...v1.3.0) (2026-09-18)
 
 
