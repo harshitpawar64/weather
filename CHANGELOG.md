@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.1](https://github.com/harshitpawar64/weather/compare/v1.3.0...v1.3.1) (2026-09-30)
+
+
+### Performance Improvements
+
+* lazy-load heavy imports in config command ([cef4fb5](https://github.com/harshitpawar64/weather/commit/cef4fb57e696445d7aee9f65c76e55fe53cc2f3e))
+
+
+### Refactor
+
+* extend theme interface to support forecast rendering ([7cad73c](https://github.com/harshitpawar64/weather/commit/7cad73ca309f34755b409f0a65a710694c2a6ebc))
+
 ## [1.3.0](https://github.com/harshitpawar64/weather/compare/v1.2.0...v1.3.0) (2026-09-18)
 
 
