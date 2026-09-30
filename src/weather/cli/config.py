@@ -1,7 +1,6 @@
 import asyncio
 from typing import Annotated
 
-import httpx
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -10,7 +9,6 @@ from weather.cache import Cache
 from weather.config import Config
 from weather.exceptions import ServiceError
 from weather.models import Location, Theme, UnitSystem
-from weather.services import GeocodingService
 
 app = typer.Typer(name="config", help="Manage configuration")
 
@@ -87,6 +85,10 @@ def reset() -> None:
 
 
 async def _resolve_location(query: str) -> Location:
+    import httpx
+
+    from weather.services import GeocodingService
+
     async with httpx.AsyncClient(timeout=10.0) as client:
         geocoder = GeocodingService(client, Cache())
         return await geocoder.geocode(query)
